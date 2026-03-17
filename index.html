@@ -12,46 +12,30 @@
   <link rel="stylesheet" href="/styles/main.css" />
 </head>
 <body>
-  <!-- Top sticky header bar -->
+  <!-- Top sticky header bar with integrated nav -->
   <header class="control-bar" id="control-bar">
     <div class="control-bar-inner">
       <div class="brand">
         <span class="brand-icon"><i class="fa-sharp fa-solid fa-hand-holding-seedling"></i></span>
         <span class="brand-text">Open Benchmark on AI Impact</span>
       </div>
-      <button class="info-badge" id="info-badge-btn" aria-label="About this benchmark" title="Learn about methodology">
-        <i class="fa-solid fa-circle-info"></i> About
-      </button>
+      <nav class="main-nav" id="main-nav">
+        <button class="nav-tab active" data-tab="explore">
+          <i class="fa-solid fa-chart-pie"></i> Explore
+        </button>
+        <button class="nav-tab" data-tab="about">
+          <i class="fa-solid fa-seedling"></i> About
+        </button>
+        <button class="nav-tab" data-tab="methodology">
+          <i class="fa-solid fa-flask"></i> Methodology
+        </button>
+        <button class="nav-tab" data-tab="summary">
+          <i class="fa-solid fa-file-lines"></i> Summary
+        </button>
+      </nav>
+      <div class="control-bar-right"></div>
     </div>
   </header>
-
-  <nav class="section-nav" id="section-nav">
-    <div class="section-nav-inner">
-      <button class="nav-tab active" data-tab="explore">
-        <i class="fa-solid fa-chart-pie"></i> Explore
-      </button>
-      <button class="nav-tab" data-tab="about">
-        <i class="fa-solid fa-seedling"></i> About
-      </button>
-      <button class="nav-tab" data-tab="methodology">
-        <i class="fa-solid fa-flask"></i> Methodology
-      </button>
-      <button class="nav-tab" data-tab="summary">
-        <i class="fa-solid fa-file-lines"></i> Summary
-      </button>
-    </div>
-  </nav>
-
-  <!-- Info panel (hidden by default) -->
-  <div class="info-panel" id="info-panel" hidden>
-    <div class="info-panel-inner">
-      <button class="info-panel-close" id="info-panel-close" aria-label="Close"><i class="fa-solid fa-xmark"></i></button>
-      <h3>Methodology</h3>
-      <p>The Open Benchmark on AI Impact measures how AI models influence human well-being across <strong>260 behavioral indicators</strong> organized into <strong>13 dimensions</strong> (subareas) grouped under 3 core well-being areas: Self Actualization, Psychological, and Physical Safety.</p>
-      <p style="margin-top:10px">Each behavioral indicator is scored from <strong>−1</strong> (clearly harmful to human flourishing) to <strong>+1</strong> (clearly beneficial). Scores are averaged up through the hierarchy. The benchmark is filtered by audience, age group, and gender to reflect differential impacts across populations.</p>
-      <p style="margin-top:10px">Scores are synthetic and generated for demonstration purposes. The benchmark framework is open and intended to be populated with real evaluation data.</p>
-    </div>
-  </div>
 
   <!-- Secondary sub-bar: filters/dropdowns -->
   <div class="filter-bar" id="filter-bar">
@@ -74,6 +58,9 @@
       </div>
     </div>
   </div>
+
+  <!-- Audience context banner (shown when specific audience selected) -->
+  <div id="audience-banner"></div>
 
   <!-- Main 3-column content area -->
   <main class="main-content">
@@ -123,7 +110,15 @@
           <h2 class="leaderboard-title">
             <i class="fa-solid fa-trophy"></i> Model Rankings
           </h2>
-          <p class="leaderboard-subtitle">Rankings reflect average impact across all 260 behavioral indicators for the selected audience.</p>
+          <p class="leaderboard-subtitle" id="leaderboard-subtitle">Rankings reflect average impact across all 260 behavioral indicators.</p>
+        </div>
+        <!-- Area filter tabs -->
+        <div class="lb-area-filter" id="lb-area-filter">
+          <!-- Populated by JS -->
+        </div>
+        <!-- Subarea filter tabs -->
+        <div class="lb-subarea-filter" id="lb-subarea-filter">
+          <!-- Populated by JS -->
         </div>
         <div class="leaderboard-list" id="leaderboard-list">
           <!-- Populated by JS -->
@@ -519,23 +514,11 @@
   <script type="module" src="/src/main.ts"></script>
   <script>
     document.addEventListener('DOMContentLoaded', function () {
-      // Info badge toggle
-      var btn = document.getElementById('info-badge-btn');
-      var panel = document.getElementById('info-panel');
-      var closeBtn = document.getElementById('info-panel-close');
-      if (btn && panel) {
-        btn.addEventListener('click', function () { panel.hidden = !panel.hidden; });
-      }
-      if (closeBtn && panel) {
-        closeBtn.addEventListener('click', function () { panel.hidden = true; });
-      }
-
       // Tab navigation
       var navTabs = document.querySelectorAll('.nav-tab');
       var filterBar = document.getElementById('filter-bar');
+      var audienceBanner = document.getElementById('audience-banner');
       var mainContent = document.querySelector('.main-content');
-      var infoPanelEl = document.getElementById('info-panel');
-      var infoBadgeEl = document.getElementById('info-badge-btn');
 
       var allSections = ['about', 'methodology', 'summary'];
 
@@ -550,9 +533,8 @@
           // Show/hide explore elements
           var isExplore = targetTab === 'explore';
           if (filterBar) filterBar.style.display = isExplore ? '' : 'none';
+          if (audienceBanner) audienceBanner.style.display = isExplore ? '' : 'none';
           if (mainContent) mainContent.style.display = isExplore ? '' : 'none';
-          if (infoPanelEl && !isExplore) infoPanelEl.hidden = true;
-          if (infoBadgeEl) infoBadgeEl.style.display = isExplore ? '' : 'none';
 
           // Show/hide section pages
           allSections.forEach(function (s) {

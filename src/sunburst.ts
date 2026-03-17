@@ -368,6 +368,24 @@ function truncate(str: string, maxLen: number): string {
   return str.slice(0, maxLen - 1) + '…';
 }
 
+// ===== Audience Area Highlighting =====
+
+export function highlightAudienceAreas(areaIds: string[]): void {
+  if (areaIds.length === 0) {
+    d3.selectAll<SVGPathElement, ArcDatum>('.arc-path')
+      .classed('audience-dimmed', false);
+    return;
+  }
+  d3.selectAll<SVGPathElement, ArcDatum>('.arc-path').each(function (d) {
+    const inPriority = areaIds.includes(d.data.areaId ?? '') || areaIds.includes(d.data.id);
+    d3.select(this).classed('audience-dimmed', !inPriority);
+  });
+}
+
+export function clearAudienceHighlight(): void {
+  d3.selectAll<SVGPathElement, ArcDatum>('.arc-path').classed('audience-dimmed', false);
+}
+
 // ===== External API =====
 
 export function resetZoom(): void {

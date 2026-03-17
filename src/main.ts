@@ -7,10 +7,10 @@ import {
   buildHierarchy,
   buildSubareaDetail,
 } from './data-loader';
-import { initSunburst, renderSunburst, updateSunburst, resetZoom } from './sunburst';
+import { initSunburst, renderSunburst, updateSunburst, resetZoom, highlightAudienceAreas, clearAudienceHighlight } from './sunburst';
 import { initControls, getCurrentFilters } from './controls';
 import { initTooltip } from './tooltip';
-import { initLeaderboard, selectLeaderboardModel } from './leaderboard';
+import { initLeaderboard, selectLeaderboardModel, updateLeaderboardFilters } from './leaderboard';
 import {
   initSummaryPanel,
   showDefaultSummary,
@@ -18,12 +18,46 @@ import {
   showSubareaSummary,
 } from './summary-panel';
 import { AREA_DESCRIPTIONS, SUBAREA_DESCRIPTIONS } from './descriptions';
+import { AUDIENCE_INFO } from './audience-info';
 
 // ===== Model Name Label =====
 
 function updateModelNameLabel(name: string): void {
   const el = document.getElementById('model-name-label');
   if (el) el.textContent = name;
+}
+
+// ===== Audience Banner =====
+
+function updateAudienceBanner(audience: string): void {
+  const banner = document.getElementById('audience-banner');
+  if (!banner) return;
+
+  const info = AUDIENCE_INFO[audience];
+  if (!info || !info.description) {
+    banner.classList.remove('visible');
+    clearAudienceHighlight();
+    return;
+  }
+
+  const focusHtml = info.focusPoints
+    .map((p) => `<span class="audience-focus-tag">${p}</span>`)
+    .join('');
+
+  banner.innerHTML = `
+    <div class="audience-banner-inner">
+      <i class="fa-solid ${info.icon} audience-banner-icon"></i>
+      <div class="audience-banner-content">
+        <div class="audience-banner-title">${info.label} — What to look for</div>
+        <p class="audience-banner-desc">${info.description}</p>
+        <div class="audience-banner-tags">${focusHtml}</div>
+      </div>
+    </div>
+  `;
+  banner.classList.add('visible');
+
+  // Highlight priority areas in sunburst
+  highlightAudienceAreas(info.priorityAreaIds);
 }
 
 // ===== App State =====
@@ -39,7 +73,6 @@ async function main(): Promise<void> {
   initTooltip();
   initSummaryPanel();
 
-  // Init sunburst with placeholder size
   initSunburst('sunburst-svg', {
     onSubareaClick: handleSubareaClick,
     onAreaClick: handleAreaClick,
@@ -47,23 +80,18 @@ async function main(): Promise<void> {
   });
 
   try {
-    // Load all data in parallel
     [taxonomy, models, benchmarkData] = await Promise.all([
       loadTaxonomy(),
       loadModels(),
       loadBenchmarkData(),
     ]);
 
-    // Init controls with loaded models
     currentFilters = initControls(models, handleFilterChange);
 
-    // Init leaderboard
-    initLeaderboard(models, benchmarkData, handleLeaderboardModelSelect);
+    initLeaderboard(models, benchmarkData, taxonomy, handleLeaderboardModelSelect);
 
-    // Highlight initial active model in leaderboard
     selectLeaderboardModel(currentFilters.model);
 
-    // Show default summary for initial model
     const initialModel = models.find((m) => m.id === currentFilters.model);
     showDefaultSummary(
       initialModel?.name ?? currentFilters.model,
@@ -71,10 +99,8 @@ async function main(): Promise<void> {
     );
     updateModelNameLabel(initialModel?.name ?? currentFilters.model);
 
-    // Initial render
     renderWithFilters(currentFilters, false);
 
-    // Hide loading
     const loading = document.getElementById('loading');
     if (loading) loading.classList.add('hidden');
 
@@ -112,28 +138,28 @@ function handleFilterChange(filters: FilterState): void {
   currentFilters = filters;
   renderWithFilters(filters, true);
   selectLeaderboardModel(filters.model);
+  updateLeaderboardFilters(filters.audience, filters.age, filters.gender);
 
-  // Update summary with new model
   const activeModel = models?.find((m) => m.id === filters.model);
   showDefaultSummary(
     activeModel?.name ?? filters.model,
     activeModel?.provider ?? ''
   );
   updateModelNameLabel(activeModel?.name ?? filters.model);
+
+  // Update audience banner and sunburst highlights
+  updateAudienceBanner(filters.audience);
 }
 
 function handleLeaderboardModelSelect(modelId: string): void {
-  // Update the model dropdown
   const modelSelect = document.getElementById('filter-model') as HTMLSelectElement | null;
   if (modelSelect) {
     modelSelect.value = modelId;
   }
-  // Get current full filters but override model
   const updatedFilters = { ...getCurrentFilters(), model: modelId };
   currentFilters = updatedFilters;
   renderWithFilters(updatedFilters, true);
 
-  // Update summary panel with new model
   const activeModel = models?.find((m) => m.id === modelId);
   showDefaultSummary(
     activeModel?.name ?? modelId,
@@ -146,9 +172,7 @@ function handleSubareaClick(subareaId: string): void {
   const scores = getScoresForFilter(benchmarkData, currentFilters);
   const detail = buildSubareaDetail(taxonomy, scores, subareaId);
   if (detail) {
-    // Find the subarea description from the map or fall back
-    const descKey = subareaId;
-    const subareaDesc = SUBAREA_DESCRIPTIONS[descKey] ?? '';
+    const subareaDesc = SUBAREA_DESCRIPTIONS[subareaId] ?? '';
     showSubareaSummary(
       detail.name,
       subareaDesc,
@@ -166,7 +190,6 @@ function handleAreaClick(areaId: string): void {
   const scores = getScoresForFilter(benchmarkData, currentFilters);
   const hierarchyData = buildHierarchy(taxonomy, scores);
 
-  // Find the area node and its subareas with scores
   const areaNode = hierarchyData.children?.find((a) => a.id === areaId);
   if (!areaNode) return;
 
@@ -181,7 +204,6 @@ function handleAreaClick(areaId: string): void {
 
 function handleCenterClick(): void {
   resetZoom();
-  // Reset summary to default
   const activeModel = models?.find((m) => m.id === currentFilters?.model);
   if (activeModel) {
     showDefaultSummary(activeModel.name, activeModel.provider);

@@ -124,7 +124,7 @@ export function showAreaSummary(
 export function showSubareaSummary(
   subareaName: string,
   subareaDesc: string,
-  avgScore: number,
+  _avgScore: number,
   behaviors: { name: string; score: number; valence: string }[]
 ): void {
   const panel = document.getElementById('summary-panel');
@@ -134,10 +134,21 @@ export function showSubareaSummary(
   const negativeCount = behaviors.filter((b) => b.score < -0.05).length;
   const totalCount = behaviors.length;
 
-  const avgClass = scoreToClass(avgScore);
-  const avgStr = formatScore(avgScore);
+  // Separate averages for positive and negative behaviors
+  const posBehaviors = behaviors.filter((b) => b.score > 0.05);
+  const negBehaviors = behaviors.filter((b) => b.score < -0.05);
+  const posAvg = posBehaviors.length
+    ? posBehaviors.reduce((sum, b) => sum + b.score, 0) / posBehaviors.length
+    : 0;
+  const negAvg = negBehaviors.length
+    ? negBehaviors.reduce((sum, b) => sum + b.score, 0) / negBehaviors.length
+    : 0;
 
-  // Top 3 most positive
+  // Bar widths: map 0..1 to 0..100% for positive, 0..-1 to 0..100% for negative
+  const posPct = Math.round(Math.abs(posAvg) * 100);
+  const negPct = Math.round(Math.abs(negAvg) * 100);
+
+  // Top 3 most positive and most negative
   const sorted = [...behaviors].sort((a, b) => b.score - a.score);
   const topPositive = sorted.slice(0, 3);
   const topNegative = sorted.slice(-3).reverse();
@@ -165,21 +176,36 @@ export function showSubareaSummary(
     <div class="summary-divider"></div>
 
     <div class="summary-section">
-      <div class="summary-section-title">Average Score</div>
-      <div class="summary-avg-score ${avgClass}">${escapeHtml(avgStr)}</div>
-      <div class="summary-breakdown">
-        <span class="summary-breakdown-pos">${positiveCount} positive</span>
-        <span class="summary-breakdown-sep"> · </span>
-        <span class="summary-breakdown-neg">${negativeCount} negative</span>
-        <span class="summary-breakdown-sep"> · </span>
-        <span class="summary-breakdown-total">${totalCount} total</span>
+      <div class="summary-section-title">Impact Breakdown</div>
+      <div class="summary-dual-bars">
+        <div class="summary-bar-group">
+          <div class="summary-bar-header">
+            <span class="summary-bar-label positive-label"><i class="fa-solid fa-circle-plus"></i> Beneficial</span>
+            <span class="summary-bar-count">${positiveCount} behaviors</span>
+          </div>
+          <div class="summary-bar-track">
+            <div class="summary-bar-fill positive-fill" style="width:${posPct}%"></div>
+          </div>
+          <div class="summary-bar-score positive-score">${posAvg > 0 ? '+' : ''}${posAvg.toFixed(2)}</div>
+        </div>
+        <div class="summary-bar-group">
+          <div class="summary-bar-header">
+            <span class="summary-bar-label negative-label"><i class="fa-solid fa-circle-minus"></i> Harmful</span>
+            <span class="summary-bar-count">${negativeCount} behaviors</span>
+          </div>
+          <div class="summary-bar-track">
+            <div class="summary-bar-fill negative-fill" style="width:${negPct}%"></div>
+          </div>
+          <div class="summary-bar-score negative-score">${negAvg.toFixed(2)}</div>
+        </div>
+        <div class="summary-bar-total">${totalCount} total indicators</div>
       </div>
     </div>
 
     <div class="summary-divider"></div>
 
     <div class="summary-section">
-      <div class="summary-section-title">Top Positive Behaviors</div>
+      <div class="summary-section-title">Top Beneficial Behaviors</div>
       <div class="summary-behaviors-list">
         ${topPositive.map(makeBehaviorRow).join('')}
       </div>
@@ -188,7 +214,7 @@ export function showSubareaSummary(
     <div class="summary-divider"></div>
 
     <div class="summary-section">
-      <div class="summary-section-title">Top Negative Behaviors</div>
+      <div class="summary-section-title">Top Harmful Behaviors</div>
       <div class="summary-behaviors-list">
         ${topNegative.map(makeBehaviorRow).join('')}
       </div>

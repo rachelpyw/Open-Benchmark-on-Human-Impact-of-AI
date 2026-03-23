@@ -21,8 +21,19 @@ let svgEl: SVGSVGElement;
 let rootSvg: d3.Selection<SVGSVGElement, unknown, null, undefined>;
 let g: d3.Selection<SVGGElement, unknown, null, undefined>;
 let currentData: SunburstNodeData | null = null;
+let _isZoomed = false;
 
 type ArcDatum = d3.HierarchyRectangularNode<SunburstNodeData>;
+
+// Behavior arc data type
+interface BehaviorArcDatum {
+  id: string;
+  name: string;
+  score: number;
+  valence: 'positive' | 'negative';
+  x0: number;
+  x1: number;
+}
 
 // Callbacks
 let onSubareaClick: ((subareaId: string) => void) | null = null;
@@ -96,12 +107,18 @@ function buildD3Hierarchy(data: SunburstNodeData): ArcDatum[] {
     return [];
   });
 
+  // Equal-size arcs: each subarea gets 1/(number of siblings) so all areas occupy equal angles
   root.sum((d) => {
-    if (d.type === 'subarea') return d.value ?? 0.1;
+    if (d.type === 'subarea') {
+      const parentArea = (data.children ?? []).find((area) =>
+        area.children?.some((s) => s.id === d.id)
+      );
+      const nSib = parentArea?.children?.length ?? 1;
+      return 1 / nSib;
+    }
     return 0;
   });
-
-  root.sort((a, b) => (b.value ?? 0) - (a.value ?? 0));
+  // No sort — preserve original taxonomy order
 
   const partition = d3.partition<SunburstNodeData>().size([2 * Math.PI, 1]);
   partition(root);
@@ -173,34 +190,133 @@ function drawArcs(nodes: ArcDatum[], animate: boolean): void {
   drawLabels(nodes, arcGroup);
 }
 
+// ===== Behavior Arc Drawing =====
+
+function drawBehaviorArcs(
+  behaviors: Array<{ id: string; name: string; score: number; valence: 'positive' | 'negative' }>,
+  subareaX0: number,
+  subareaX1: number
+): void {
+  // Remove any existing behavior group
+  g.select('.behavior-arcs-group').remove();
+  g.select('.zoom-back-group').remove();
+
+  const behaviorGroup = g.append('g').attr('class', 'behavior-arcs-group');
+
+  const totalSpan = subareaX1 - subareaX0;
+  const perBehavior = totalSpan / Math.max(behaviors.length, 1);
+
+  const behaviorData: BehaviorArcDatum[] = behaviors.map((b, i) => ({
+    ...b,
+    x0: subareaX0 + i * perBehavior,
+    x1: subareaX0 + (i + 1) * perBehavior,
+  }));
+
+  const arc = d3.arc<BehaviorArcDatum>()
+    .innerRadius(RING3_INNER)
+    .outerRadius(RING3_OUTER)
+    .startAngle((d) => d.x0)
+    .endAngle((d) => d.x1)
+    .padAngle(0.008)
+    .padRadius(150)
+    .cornerRadius(3);
+
+  const paths = behaviorGroup
+    .selectAll<SVGPathElement, BehaviorArcDatum>('.behavior-arc')
+    .data(behaviorData)
+    .join('path')
+    .attr('class', 'behavior-arc')
+    .attr('data-id', (d) => d.id)
+    .attr('fill', (d) => d.score > 0.05 ? '#16a34a' : d.score < -0.05 ? '#dc2626' : '#9ca3af')
+    .attr('d', (d) => arc(d) ?? '')
+    .attr('opacity', 0);
+
+  // Stagger animation
+  paths
+    .transition()
+    .duration(300)
+    .delay((_d, i) => i * 30)
+    .attr('opacity', 0.9);
+
+  // Labels on wide enough arcs
+  const labelsGroup = behaviorGroup.append('g').attr('class', 'behavior-labels');
+  behaviorData.forEach((d) => {
+    const span = d.x1 - d.x0;
+    if (span < 0.12) return;
+    const maxChars = span > 0.25 ? 14 : 8;
+    const angle = (d.x0 + d.x1) / 2;
+    const midR = (RING3_INNER + RING3_OUTER) / 2;
+    const x = Math.sin(angle) * midR;
+    const y = -Math.cos(angle) * midR;
+    const rotDeg = (angle * 180) / Math.PI - 90;
+    const flip = angle > Math.PI ? 180 : 0;
+
+    labelsGroup
+      .append('text')
+      .attr('class', 'behavior-label')
+      .attr('transform', `translate(${x},${y}) rotate(${rotDeg + flip})`)
+      .style('text-anchor', 'middle')
+      .style('dominant-baseline', 'middle')
+      .style('font-size', '8px')
+      .style('font-weight', '600')
+      .style('fill', '#fff')
+      .style('pointer-events', 'none')
+      .text(truncate(d.name, maxChars));
+  });
+
+  showZoomBackButton();
+}
+
+function showZoomBackButton(): void {
+  g.select('.zoom-back-group').remove();
+  const backGroup = g.append('g').attr('class', 'zoom-back-group').style('cursor', 'pointer');
+
+  backGroup
+    .append('circle')
+    .attr('class', 'zoom-back-circle')
+    .attr('r', 28)
+    .attr('fill', 'white');
+
+  backGroup
+    .append('text')
+    .attr('class', 'zoom-back-text')
+    .text('×');
+
+  backGroup.on('click', () => resetZoomFull());
+}
+
 // ===== Labels =====
 
 function drawLabels(nodes: ArcDatum[], parent: d3.Selection<SVGGElement, unknown, null, undefined>): void {
   const labelsGroup = parent.append('g').attr('class', 'labels-group');
 
-  // Area labels (depth 1) — curved text along arc midline
+  // ---- Area labels (depth 1) — curved textPath along arc midline ----
+  // With equal arcs each area spans ~2π/3 ≈ 2.09 radians — plenty of space.
   const labelDefs = labelsGroup.append('defs');
   const areaNodes = nodes.filter((d) => d.depth === 1);
   areaNodes.forEach((d) => {
-    const x0 = (d as unknown as { x0: number }).x0;
-    const x1 = (d as unknown as { x1: number }).x1;
-    const arcSpan = x1 - x0;
-    if (arcSpan < 0.3) return;
+    const x0Raw = (d as unknown as { x0: number }).x0;
+    const x1Raw = (d as unknown as { x1: number }).x1;
+    const arcSpan = x1Raw - x0Raw;
+    if (arcSpan < 0.2) return;
 
-    const midAngle = (x0 + x1) / 2;
+    const midAngle = (x0Raw + x1Raw) / 2;
     const midR = (RING1_INNER + RING1_OUTER) / 2;
     const pathId = `area-label-path-${d.data.id}`;
     const isBottom = midAngle > Math.PI;
-    const largeArc = arcSpan > Math.PI ? 1 : 0;
+
+    // Clamp to 75% of arc so text never touches the edges
+    const clampedSpan = Math.min(arcSpan * 0.75, Math.PI * 0.9);
+    const x0 = midAngle - clampedSpan / 2;
+    const x1 = midAngle + clampedSpan / 2;
+    const largeArc = clampedSpan > Math.PI ? 1 : 0;
 
     let pathD: string;
     if (!isBottom) {
-      // Clockwise: text reads left-to-right
       const sx = Math.sin(x0) * midR, sy = -Math.cos(x0) * midR;
       const ex = Math.sin(x1) * midR, ey = -Math.cos(x1) * midR;
       pathD = `M ${sx} ${sy} A ${midR} ${midR} 0 ${largeArc} 1 ${ex} ${ey}`;
     } else {
-      // Counter-clockwise: flip so text stays right-side-up
       const sx = Math.sin(x1) * midR, sy = -Math.cos(x1) * midR;
       const ex = Math.sin(x0) * midR, ey = -Math.cos(x0) * midR;
       pathD = `M ${sx} ${sy} A ${midR} ${midR} 0 ${largeArc} 0 ${ex} ${ey}`;
@@ -208,48 +324,55 @@ function drawLabels(nodes: ArcDatum[], parent: d3.Selection<SVGGElement, unknown
 
     labelDefs.append('path').attr('id', pathId).attr('d', pathD);
 
-    // Name textPath centered on arc
     labelsGroup
       .append('text')
       .attr('class', 'area-label')
-      .style('fill', '#1a1a1a')
-      .style('font-size', '11px')
-      .style('font-weight', '700')
+      .style('fill', '#111827')
+      .style('font-size', '12px')
+      .style('font-weight', '800')
+      .style('letter-spacing', '0.04em')
       .style('pointer-events', 'none')
       .append('textPath')
       .attr('href', `#${pathId}`)
       .attr('startOffset', '50%')
       .attr('text-anchor', 'middle')
-      .text(d.data.name);
+      .text(d.data.name.toUpperCase());
   });
 
-  // Subarea labels (depth 2) — show if arc is wide enough
+  // ---- Subarea labels (depth 2) — radial text at arc midpoint ----
+  // With equal arcs each subarea has ~0.4–0.55 radians of space.
   const subareaNodes = nodes.filter((d) => d.depth === 2);
   subareaNodes.forEach((d) => {
-    const arcSpan = (d as unknown as { x1: number }).x1 - (d as unknown as { x0: number }).x0;
-    if (arcSpan < 0.18) return;
+    const x0 = (d as unknown as { x0: number }).x0;
+    const x1 = (d as unknown as { x1: number }).x1;
+    const arcSpan = x1 - x0;
+    if (arcSpan < 0.15) return;
 
-    const angle = ((d as unknown as { x0: number }).x0 + (d as unknown as { x1: number }).x1) / 2;
+    const angle = (x0 + x1) / 2;
     const midR = (RING2_INNER + RING2_OUTER) / 2;
-    const x = Math.sin(angle) * midR;
-    const y = -Math.cos(angle) * midR;
+    const px = Math.sin(angle) * midR;
+    const py = -Math.cos(angle) * midR;
 
+    // Rotate so text runs along the radial direction; flip bottom half
     const rotDeg = (angle * 180) / Math.PI - 90;
     const flip = angle > Math.PI ? 180 : 0;
 
+    // Estimate available characters: arc chord ≈ arcSpan * midR px, each char ~7px
+    const availPx = arcSpan * midR;
+    const maxChars = Math.max(5, Math.floor(availPx / 7.5));
+
     labelsGroup
       .append('text')
-      .attr('class', 'subarea-label')
       .attr('x', 0)
       .attr('y', 0)
-      .attr('transform', `translate(${x},${y}) rotate(${rotDeg + flip})`)
+      .attr('transform', `translate(${px},${py}) rotate(${rotDeg + flip})`)
       .style('fill', '#1f2937')
-      .style('font-size', '9.5px')
+      .style('font-size', '10px')
       .style('font-weight', '600')
       .style('text-anchor', 'middle')
       .style('dominant-baseline', 'middle')
       .style('pointer-events', 'none')
-      .text(truncate(d.data.name, arcSpan > 0.5 ? 16 : 10));
+      .text(truncate(d.data.name, maxChars));
   });
 }
 
@@ -389,9 +512,91 @@ export function clearAudienceHighlight(): void {
 // ===== External API =====
 
 export function resetZoom(): void {
-  // No-op: zoom removed; kept for API compatibility
+  resetZoomFull();
 }
 
 export function setShowBehaviors(_show: boolean): void {
-  // No-op: behaviors ring removed from sunburst
+  // No-op: behaviors ring controlled via zoomToSubarea
+}
+
+// ===== Zoom to Subarea =====
+
+export function zoomToSubarea(
+  subareaId: string,
+  behaviors: Array<{ id: string; name: string; score: number; valence: 'positive' | 'negative' }>
+): void {
+  // Find the subarea arc node to determine its angular position
+  let subareaX0 = 0;
+  let subareaX1 = 2 * Math.PI / 3; // fallback: one third of circle
+
+  const subareaPath = g.select<SVGPathElement>(`.arc-path[data-id="${subareaId}"]`);
+  if (!subareaPath.empty()) {
+    const datum = subareaPath.datum() as ArcDatum;
+    if (datum) {
+      subareaX0 = (datum as unknown as { x0: number }).x0;
+      subareaX1 = (datum as unknown as { x1: number }).x1;
+    }
+  }
+
+  // Dim non-related arcs
+  g.selectAll<SVGPathElement, ArcDatum>('.arc-path').each(function (d) {
+    const isRelated =
+      d.data.id === subareaId ||
+      d.data.subareaId === subareaId ||
+      (d.depth === 1 && g.select<SVGPathElement>(`.arc-path[data-id="${subareaId}"]`).datum()
+        ? (g.select<SVGPathElement>(`.arc-path[data-id="${subareaId}"]`).datum() as ArcDatum)?.data?.areaId === d.data.id
+        : false);
+    d3.select(this)
+      .transition()
+      .duration(300)
+      .attr('opacity', isRelated ? 1 : 0.2);
+  });
+
+  // Zoom g group toward the subarea midpoint
+  const midAngle = (subareaX0 + subareaX1) / 2;
+  const zoomR = (RING2_INNER + RING2_OUTER) / 2;
+  const cx = Math.sin(midAngle) * zoomR;
+  const cy = -Math.cos(midAngle) * zoomR;
+  const scale = 1.15;
+  const tx = cx * (1 - scale);
+  const ty = cy * (1 - scale);
+
+  g.transition()
+    .duration(400)
+    .ease(d3.easeCubicInOut)
+    .attr('transform', `matrix(${scale},0,0,${scale},${tx},${ty})`);
+
+  _isZoomed = true;
+
+  // Draw behavior arcs after a short delay (let zoom settle)
+  setTimeout(() => {
+    drawBehaviorArcs(behaviors, subareaX0, subareaX1);
+  }, 200);
+}
+
+export function resetZoomFull(): void {
+  if (!_isZoomed && g.select('.behavior-arcs-group').empty()) return;
+
+  // Remove behavior arcs and zoom-back button
+  g.select('.behavior-arcs-group')
+    .transition()
+    .duration(200)
+    .attr('opacity', 0)
+    .remove();
+
+  g.select('.zoom-back-group').remove();
+
+  // Restore g transform
+  g.transition()
+    .duration(400)
+    .ease(d3.easeCubicInOut)
+    .attr('transform', '');
+
+  // Restore arc opacities
+  g.selectAll<SVGPathElement, ArcDatum>('.arc-path')
+    .transition()
+    .duration(300)
+    .attr('opacity', 1);
+
+  _isZoomed = false;
 }

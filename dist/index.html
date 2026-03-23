@@ -9,33 +9,34 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" crossorigin="anonymous" />
-  <script type="module" crossorigin src="./assets/index-CCgeYn42.js"></script>
-  <link rel="stylesheet" crossorigin href="./assets/index-Ci-URYYn.css">
+  <script type="module" crossorigin src="./assets/index-BBbQB9TV.js"></script>
+  <link rel="stylesheet" crossorigin href="./assets/index-CHVejmRt.css">
 </head>
 <body>
-  <!-- Top sticky header bar -->
+  <!-- Top sticky header bar with integrated nav -->
   <header class="control-bar" id="control-bar">
     <div class="control-bar-inner">
       <div class="brand">
-        <span class="brand-icon"><i class="fa-solid fa-network-wired"></i></span>
+        <span class="brand-icon"><i class="fa-sharp fa-solid fa-hand-holding-seedling"></i></span>
         <span class="brand-text">Open Benchmark on AI Impact</span>
       </div>
-      <button class="info-badge" id="info-badge-btn" aria-label="About this benchmark" title="Learn about methodology">
-        <i class="fa-solid fa-circle-info"></i> About
-      </button>
+      <nav class="main-nav" id="main-nav">
+        <button class="nav-tab active" data-tab="explore">
+          <i class="fa-solid fa-chart-pie"></i> Explore
+        </button>
+        <button class="nav-tab" data-tab="about">
+          <i class="fa-solid fa-seedling"></i> About
+        </button>
+        <button class="nav-tab" data-tab="methodology">
+          <i class="fa-solid fa-flask"></i> Methodology
+        </button>
+        <button class="nav-tab" data-tab="summary">
+          <i class="fa-solid fa-file-lines"></i> Summary
+        </button>
+      </nav>
+      <div class="control-bar-right"></div>
     </div>
   </header>
-
-  <!-- Info panel (hidden by default) -->
-  <div class="info-panel" id="info-panel" hidden>
-    <div class="info-panel-inner">
-      <button class="info-panel-close" id="info-panel-close" aria-label="Close"><i class="fa-solid fa-xmark"></i></button>
-      <h3>Methodology</h3>
-      <p>The Open Benchmark on AI Impact measures how AI models influence human well-being across <strong>260 behavioral indicators</strong> organized into <strong>13 dimensions</strong> (subareas) grouped under 3 core well-being areas: Self Actualization, Psychological, and Physical Safety.</p>
-      <p style="margin-top:10px">Each behavioral indicator is scored from <strong>−1</strong> (clearly harmful to human flourishing) to <strong>+1</strong> (clearly beneficial). Scores are averaged up through the hierarchy. The benchmark is filtered by audience, age group, and gender to reflect differential impacts across populations.</p>
-      <p style="margin-top:10px">Scores are synthetic and generated for demonstration purposes. The benchmark framework is open and intended to be populated with real evaluation data.</p>
-    </div>
-  </div>
 
   <!-- Secondary sub-bar: filters/dropdowns -->
   <div class="filter-bar" id="filter-bar">
@@ -59,6 +60,9 @@
     </div>
   </div>
 
+  <!-- Audience context banner (shown when specific audience selected) -->
+  <div id="audience-banner"></div>
+
   <!-- Main 3-column content area -->
   <main class="main-content">
     <div class="viz-container">
@@ -70,6 +74,7 @@
 
       <!-- CENTER: Sunburst + Legend -->
       <div class="sunburst-column">
+        <div class="model-name-label" id="model-name-label">Claude 3 Opus</div>
         <div class="sunburst-wrapper" id="sunburst-wrapper">
           <div id="loading" class="loading-state">
             <div class="loading-spinner"></div>
@@ -106,7 +111,15 @@
           <h2 class="leaderboard-title">
             <i class="fa-solid fa-trophy"></i> Model Rankings
           </h2>
-          <p class="leaderboard-subtitle">Rankings reflect average impact across all 260 behavioral indicators for the selected audience.</p>
+          <p class="leaderboard-subtitle" id="leaderboard-subtitle">Rankings reflect average impact across all 260 behavioral indicators.</p>
+        </div>
+        <!-- Area filter tabs -->
+        <div class="lb-area-filter" id="lb-area-filter">
+          <!-- Populated by JS -->
+        </div>
+        <!-- Subarea filter tabs -->
+        <div class="lb-subarea-filter" id="lb-subarea-filter">
+          <!-- Populated by JS -->
         </div>
         <div class="leaderboard-list" id="leaderboard-list">
           <!-- Populated by JS -->
@@ -116,25 +129,429 @@
     </div>
   </main>
 
+  <!-- ===== ABOUT SECTION ===== -->
+  <div id="section-about" class="tab-section" hidden>
+    <div class="tab-section-inner">
+
+      <div class="section-hero">
+        <div class="section-hero-tag"><i class="fa-solid fa-hand-holding-seedling"></i> Open Benchmark on AI Impact</div>
+        <h1 class="section-hero-title">Does AI Make Humans Flourish?</h1>
+        <p class="section-hero-subtitle">
+          Today's AI systems are evaluated on technical performance alone. No widely adopted framework measures whether AI actually benefits the people who use it. We're building the first open benchmark that does.
+        </p>
+      </div>
+
+      <div class="section-cards-grid">
+        <div class="section-card section-card-highlight">
+          <div class="section-card-icon"><i class="fa-solid fa-triangle-exclamation"></i></div>
+          <h3>The Challenge</h3>
+          <p>Current AI benchmarks measure accuracy, speed, and task completion — but reveal nothing about what happens to the human on the other side of the screen. They don't tell us whether an AI helps a student learn or merely completes the work for them, whether it supports emotional health or fosters unhealthy dependence, or whether it enriches creativity or flattens it.</p>
+        </div>
+        <div class="section-card">
+          <div class="section-card-icon"><i class="fa-solid fa-flask"></i></div>
+          <h3>Our Approach</h3>
+          <p>The <strong>Advancing Humans with AI (AHA)</strong> research program at the MIT Media Lab — in collaboration with the Psychology of Technology Institute, USC, and UC Berkeley — is building the world's first open benchmark suite that evaluates AI systems on their impact on human flourishing.</p>
+        </div>
+      </div>
+
+      <div class="section-divider"></div>
+
+      <h2 class="section-heading"><i class="fa-solid fa-network-wired"></i> Origins &amp; Collaborators</h2>
+      <p class="section-body">Our work builds on a workshop organized at MIT with support from the Omidyar Network. In October 2025, we convened <strong>80 interdisciplinary experts from over 40 institutions</strong> to address this gap. Through intensive collaboration, participants developed novel evaluation frameworks for assessing AI's impact on human flourishing across three core dimensions.</p>
+      <p class="section-body" style="margin-top:10px">This effort produced a framework for benchmarking the human impact of AI and a community-driven initiative to design human-centered AI benchmarks, including <strong>PsychoRisk Bench</strong> (our MIT effort), <strong>Humane Bench</strong>, and more.</p>
+
+      <div class="section-collab-list">
+        <div class="section-collab-item"><i class="fa-solid fa-university"></i> MIT Media Lab</div>
+        <div class="section-collab-item"><i class="fa-solid fa-brain"></i> Psychology of Technology Institute</div>
+        <div class="section-collab-item"><i class="fa-solid fa-graduation-cap"></i> University of Southern California</div>
+        <div class="section-collab-item"><i class="fa-solid fa-graduation-cap"></i> UC Berkeley</div>
+      </div>
+
+      <div class="section-divider"></div>
+
+      <h2 class="section-heading"><i class="fa-solid fa-box-open"></i> Three Deliverables</h2>
+
+      <div class="section-deliverables">
+        <div class="section-deliverable">
+          <div class="section-deliverable-num">01</div>
+          <div class="section-deliverable-body">
+            <h4>Open Benchmark Suite</h4>
+            <p>A comprehensive, publicly available set of evaluation scenarios spanning all six flourishing domains. Each benchmark follows a rigorous structure: a realistic multi-turn interaction, clear definitions of positive and negative model behaviors, and grounding in peer-reviewed literature from learning science, psychology, and human-computer interaction.</p>
+            <p style="margin-top:8px">The team is developing original benchmarks and aggregating existing ones, including <em>SycophancyBench</em>, <em>CoraBench</em> (focused on children), and OpenAI's <em>HealthBench</em>, to build a unified, independent evaluation controlled by no single company.</p>
+          </div>
+        </div>
+        <div class="section-deliverable">
+          <div class="section-deliverable-num">02</div>
+          <div class="section-deliverable-body">
+            <h4>Public-Facing "Nutrition Label" for AI</h4>
+            <p>Technical scores alone do not help parents, teachers, or policymakers make informed decisions. This deliverable translates benchmark results into accessible, human-readable profiles analogous to nutrition labels on food packaging or Common Sense Media ratings.</p>
+            <p style="margin-top:8px">A parent asking "Is this AI safe for my child?" or a teacher asking "Does this tool support learning?" receives a clear, contextualized answer. The label adapts to its audience, offering different views for end users, AI developers, and policymakers.</p>
+          </div>
+        </div>
+        <div class="section-deliverable">
+          <div class="section-deliverable-num">03</div>
+          <div class="section-deliverable-body">
+            <h4>Open Submission &amp; Community Participation</h4>
+            <p>Any benchmark relating to human psychological well-being or flourishing is eligible for inclusion — whether it addresses positive outcomes such as autonomy and competence, or negative outcomes such as codependence and psychological distress.</p>
+            <p style="margin-top:8px">Submissions follow a standardized structure covering benchmark justification, scenario details, and scoring criteria. The project is designed as a living resource, welcoming contributions from interdisciplinary experts worldwide.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="section-divider"></div>
+
+      <div class="section-callout">
+        <i class="fa-solid fa-calendar-star"></i>
+        <div>
+          <strong>Public Launch: April 28, 2026</strong>
+          <p>The initiative is seeking philanthropic support to execute a public launch. AHA's research has already shaped policy — the team's findings on AI companion chatbots were cited as key inspiration in <strong>California Senate Bill 243</strong>, protecting children from harmful AI relationships.</p>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ===== METHODOLOGY SECTION ===== -->
+  <div id="section-methodology" class="tab-section" hidden>
+    <div class="tab-section-inner">
+
+      <div class="section-hero">
+        <div class="section-hero-tag"><i class="fa-solid fa-flask"></i> How We Measure</div>
+        <h1 class="section-hero-title">Methodology</h1>
+        <p class="section-hero-subtitle">
+          Building benchmarks that measure AI's impact on human flourishing requires a rigorous, multi-step evaluation process grounded in both psychological science and AI engineering.
+        </p>
+      </div>
+
+      <h2 class="section-heading"><i class="fa-solid fa-sitemap"></i> Six Dimensions of Human Flourishing</h2>
+      <p class="section-body">Drawing on psychology, education research, clinical science, and human-computer interaction, the AHA team has developed a framework that evaluates AI across six core domains of human experience.</p>
+
+      <div class="section-domains-grid">
+        <div class="section-domain-card">
+          <div class="section-domain-num">01</div>
+          <h4>Happiness &amp; Life Satisfaction</h4>
+          <p>Does the AI contribute to users' subjective well-being, positive affect, and overall sense of life satisfaction?</p>
+        </div>
+        <div class="section-domain-card">
+          <div class="section-domain-num">02</div>
+          <h4>Mental &amp; Physical Health</h4>
+          <p>Does the AI support mental health, encourage healthy behaviors, and avoid fostering anxiety, dependency, or harmful patterns?</p>
+        </div>
+        <div class="section-domain-card">
+          <div class="section-domain-num">03</div>
+          <h4>Meaning &amp; Purpose</h4>
+          <p>Does the AI help users find meaning, pursue goals, and develop a sense of direction and personal significance?</p>
+        </div>
+        <div class="section-domain-card">
+          <div class="section-domain-num">04</div>
+          <h4>Character &amp; Virtue</h4>
+          <p>Does the AI support the development of moral character, honesty, integrity, and ethical reasoning?</p>
+        </div>
+        <div class="section-domain-card">
+          <div class="section-domain-num">05</div>
+          <h4>Close Social Relationships</h4>
+          <p>Does the AI strengthen human connections, support healthy relationships, and avoid replacing genuine social bonds?</p>
+        </div>
+        <div class="section-domain-card">
+          <div class="section-domain-num">06</div>
+          <h4>Financial &amp; Material Stability</h4>
+          <p>Does the AI help users achieve economic security and practical stability rather than fostering dependence or vulnerability?</p>
+        </div>
+      </div>
+
+      <p class="section-body section-attribution">Framework informed by the <a href="https://hfh.fas.harvard.edu/measuring-flourishing" target="_blank" rel="noopener">Harvard Human Flourishing Program</a>.</p>
+
+      <div class="section-divider"></div>
+
+      <h2 class="section-heading"><i class="fa-solid fa-check-double"></i> What Makes a Good Benchmark?</h2>
+      <p class="section-body">Not all benchmarks are equal. We evaluate each benchmark candidate against a rigorous quality framework before including it in the suite.</p>
+
+      <div class="section-criteria-list">
+        <div class="section-criterion">
+          <i class="fa-solid fa-circle-check"></i>
+          <div>
+            <strong>Ecologically Valid</strong>
+            <p>Multi-turn simulations that reflect real-world user interactions, judged representative by human experts.</p>
+          </div>
+        </div>
+        <div class="section-criterion">
+          <i class="fa-solid fa-circle-check"></i>
+          <div>
+            <strong>Construct Fidelity</strong>
+            <p>Simulated inputs are consistently representative of the construct of interest — verified by human experts and LLM judges.</p>
+          </div>
+        </div>
+        <div class="section-criterion">
+          <i class="fa-solid fa-circle-check"></i>
+          <div>
+            <strong>Broad Coverage</strong>
+            <p>Inputs capture a broad, complete set of scenarios — measured through semantic diversity analysis.</p>
+          </div>
+        </div>
+        <div class="section-criterion">
+          <i class="fa-solid fa-circle-check"></i>
+          <div>
+            <strong>Automatable</strong>
+            <p>Benchmarks can be run automatically with LLM-as-judge systems that approximate human judgment.</p>
+          </div>
+        </div>
+        <div class="section-criterion">
+          <i class="fa-solid fa-circle-check"></i>
+          <div>
+            <strong>Model Sensitivity</strong>
+            <p>Benchmark differentiates between better and worse models — later models should score higher than earlier ones.</p>
+          </div>
+        </div>
+        <div class="section-criterion">
+          <i class="fa-solid fa-circle-check"></i>
+          <div>
+            <strong>Reliable Judgment</strong>
+            <p>LLM-as-judge appropriately and consistently detects harm/benefit, validated against human rater judgments.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="section-divider"></div>
+
+      <h2 class="section-heading"><i class="fa-solid fa-list-ol"></i> Five-Step Evaluation Process</h2>
+
+      <div class="section-steps">
+        <div class="section-step">
+          <div class="section-step-num">1</div>
+          <div class="section-step-body">
+            <h4>Submission Received</h4>
+            <p>Benchmark submitters provide the construct definition, example interaction patterns, and expected model behaviors. The community identifies what patterns within user input messages are expected to elicit behaviors of interest.</p>
+          </div>
+        </div>
+        <div class="section-step">
+          <div class="section-step-num">2</div>
+          <div class="section-step-body">
+            <h4>Run the Simulation</h4>
+            <p>LLMs generate additional related simulations from the seed examples, expanding coverage. For example: given 3 example messages expressing distress, the model generates 20 semantically related variations to ensure broad scenario coverage.</p>
+          </div>
+        </div>
+        <div class="section-step">
+          <div class="section-step-num">3</div>
+          <div class="section-step-body">
+            <h4>Validate Input Pattern</h4>
+            <p>We ask the LLM whether generated examples match the intended input pattern, comparing against submitter intent and human expert judgments. This reveals whether examples capture the construct or drift beyond it.</p>
+          </div>
+        </div>
+        <div class="section-step">
+          <div class="section-step-num">4</div>
+          <div class="section-step-body">
+            <h4>LLM-as-Judge Evaluation</h4>
+            <p>The LLM evaluates whether model responses are harmful or helpful (depending on whether the construct is negatively or positively framed). Human raters independently judge the same outputs to validate LLM judge accuracy.</p>
+          </div>
+        </div>
+        <div class="section-step">
+          <div class="section-step-num">5</div>
+          <div class="section-step-body">
+            <h4>Generate Statistics &amp; Report</h4>
+            <p>We compute test-retest reliability and sensitivity statistics across models. Scored metrics include: semantic diversity of conversations, variation in LLM-judge scores, and differentiation across model generations and providers.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="section-divider"></div>
+
+      <h2 class="section-heading"><i class="fa-solid fa-table"></i> Comprehensiveness Framework</h2>
+      <p class="section-body">We use a three-dimensional framework to ensure our benchmark suite provides balanced, comprehensive coverage. Benchmarks are mapped across: <strong>level of need</strong> (Physical → Psychological → Moral/Self-Actualization), <strong>valence</strong> (positive outcomes vs. prevention of harm), and <strong>scope</strong> (individual focus vs. societal focus).</p>
+
+      <div class="section-table-wrapper">
+        <table class="section-table">
+          <thead>
+            <tr>
+              <th>Level</th>
+              <th>Valence</th>
+              <th>Individual Focus</th>
+              <th>Society Focus</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td rowspan="2" class="section-table-level moral">Moral / Self-Actualization</td>
+              <td class="section-table-val positive">Positive</td>
+              <td>Supporting Individual Creativity</td>
+              <td>Design for Equity and Inclusion (HumaneBench)</td>
+            </tr>
+            <tr>
+              <td class="section-table-val negative">Negative</td>
+              <td>Cognitive Offloading</td>
+              <td>Copyright &amp; Intellectual Property</td>
+            </tr>
+            <tr>
+              <td rowspan="2" class="section-table-level psychological">Psychological</td>
+              <td class="section-table-val positive">Positive</td>
+              <td>Foster Healthy Relationships · Enable Meaningful Choices</td>
+              <td>Prioritize Long-term Wellbeing · Social Navigation (Sotopia)</td>
+            </tr>
+            <tr>
+              <td class="section-table-val negative">Negative</td>
+              <td>Attachment/Dependency (AAP) · Protect Dignity (HumaneBench)</td>
+              <td>Human-Like Simulation · Suicidality Assessment</td>
+            </tr>
+            <tr>
+              <td rowspan="2" class="section-table-level physical">Physical</td>
+              <td class="section-table-val positive">Positive</td>
+              <td>Enhance Human Capabilities (HumaneBench)</td>
+              <td>Improve Peace &amp; Conflict Resolution</td>
+            </tr>
+            <tr>
+              <td class="section-table-val negative">Negative</td>
+              <td>Respect User Attention (HumaneBench)</td>
+              <td>Energy Efficiency (QueueLab)</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ===== SUMMARY SECTION ===== -->
+  <div id="section-summary" class="tab-section" hidden>
+    <div class="tab-section-inner">
+
+      <div class="section-hero">
+        <div class="section-hero-tag"><i class="fa-solid fa-file-lines"></i> Framework Overview</div>
+        <h1 class="section-hero-title">Mapping AI Impact to Human Flourishing</h1>
+        <p class="section-hero-subtitle">
+          Rather than defining yet another taxonomy, this benchmark allows anyone to define a construct that relates to human flourishing — and places those constructs within a unified, evidence-based framework.
+        </p>
+      </div>
+
+      <h2 class="section-heading"><i class="fa-solid fa-layer-group"></i> A Hierarchy of Human Needs</h2>
+      <p class="section-body">Many dimensions of flourishing map naturally onto Maslow's hierarchy of human needs. A flourishing society supports users' <strong>physical needs</strong> (health, safety from harm), which enables people to pursue <strong>social and relational needs</strong> (belonging, meaningful relationships), which in turn creates space for <strong>psychological needs</strong> (autonomy, competence, relatedness), ultimately leading to <strong>self-actualization</strong> (purpose, meaning, moral values).</p>
+      <p class="section-body" style="margin-top:10px">LLM benchmarks exist at every level of this hierarchy — and this framework lets us ensure comprehensive coverage across all levels.</p>
+
+      <div class="section-hierarchy">
+        <div class="section-hierarchy-level h-self">
+          <div class="section-hierarchy-label">Self-Actualization</div>
+          <div class="section-hierarchy-desc">Meaning, purpose, creativity, moral values, identity</div>
+        </div>
+        <div class="section-hierarchy-level h-psych">
+          <div class="section-hierarchy-label">Psychological</div>
+          <div class="section-hierarchy-desc">Autonomy, competence, relatedness, character, mental health</div>
+        </div>
+        <div class="section-hierarchy-level h-social">
+          <div class="section-hierarchy-label">Social</div>
+          <div class="section-hierarchy-desc">Belonging, relationships, trust, community, social skills</div>
+        </div>
+        <div class="section-hierarchy-level h-physical">
+          <div class="section-hierarchy-label">Physical</div>
+          <div class="section-hierarchy-desc">Health, safety, financial security, shelter, nutrition</div>
+        </div>
+      </div>
+
+      <div class="section-divider"></div>
+
+      <h2 class="section-heading"><i class="fa-solid fa-arrows-left-right"></i> Positive and Negative Dimensions</h2>
+      <p class="section-body">Within each level, every construct can be considered along both positive and negative dimensions. The <strong>positive dimension</strong> refers to the extent to which AI systems actively enhance valued outcomes (e.g. fostering a sense of belonging). The <strong>negative dimension</strong> refers to the extent to which they prevent or mitigate harmful outcomes (e.g. avoiding shame and social exclusion).</p>
+      <p class="section-body" style="margin-top:10px">This dual framing is consistent with established frameworks like Schwartz's taxonomy of values, which recognizes dimensions of <em>conservation vs. openness to change</em> and <em>self-enhancement vs. self-transcendence</em>.</p>
+
+      <div class="section-dimension-cards">
+        <div class="section-dimension-card positive-card">
+          <div class="section-dimension-icon"><i class="fa-solid fa-circle-plus"></i></div>
+          <h4>Positive Outcomes</h4>
+          <p>AI actively enhances valued aspects of human flourishing — supporting creativity, strengthening relationships, fostering autonomy, building competence, enriching meaning.</p>
+        </div>
+        <div class="section-dimension-card negative-card">
+          <div class="section-dimension-icon"><i class="fa-solid fa-circle-minus"></i></div>
+          <h4>Harm Prevention</h4>
+          <p>AI prevents or mitigates harmful outcomes — avoiding dependency, protecting dignity, respecting attention, reducing anxiety, preventing exploitation or manipulation.</p>
+        </div>
+      </div>
+
+      <div class="section-divider"></div>
+
+      <h2 class="section-heading"><i class="fa-solid fa-chart-pie"></i> How to Read the Visualization</h2>
+      <p class="section-body">The sunburst visualization on the Explore tab maps AI model behavior scores onto this human flourishing framework. Each ring represents a level of the hierarchy:</p>
+
+      <div class="section-viz-guide">
+        <div class="section-viz-ring">
+          <div class="section-viz-ring-dot" style="background: var(--accent)"></div>
+          <div><strong>Inner Ring</strong> — Three core well-being areas: Self Actualization, Psychological, Physical Safety</div>
+        </div>
+        <div class="section-viz-ring">
+          <div class="section-viz-ring-dot" style="background: #7c3aed99"></div>
+          <div><strong>Outer Ring</strong> — 13 subareas (e.g. Mental Health, Creativity, Autonomy, Sleep, Financial Security)</div>
+        </div>
+      </div>
+
+      <p class="section-body" style="margin-top: 16px">Arc color indicates impact direction and magnitude:</p>
+
+      <div class="section-color-guide">
+        <div class="section-color-item">
+          <div class="section-color-swatch" style="background: #dc2626"></div>
+          <div><strong>Red</strong> — AI behavior consistently harms this dimension of human flourishing. Scores approach −1.</div>
+        </div>
+        <div class="section-color-item">
+          <div class="section-color-swatch" style="background: #e5e7eb"></div>
+          <div><strong>Grey/Neutral</strong> — AI has no measurable net effect on this dimension. Score near 0.</div>
+        </div>
+        <div class="section-color-item">
+          <div class="section-color-swatch" style="background: #16a34a"></div>
+          <div><strong>Green</strong> — AI behavior actively promotes this dimension of human flourishing. Scores approach +1.</div>
+        </div>
+      </div>
+
+      <div class="section-divider"></div>
+
+      <div class="section-callout">
+        <i class="fa-solid fa-triangle-exclamation"></i>
+        <div>
+          <strong>Important Caveat</strong>
+          <p>All scores in this visualization are currently <strong>synthetic/simulated</strong> for demonstration purposes. The benchmark framework is open and intended to be populated with real evaluation data through rigorous multi-turn simulation studies. We invite researchers to contribute benchmarks through our open submission process.</p>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
   <!-- Tooltip -->
   <div class="tooltip" id="tooltip" role="tooltip" aria-hidden="true"></div>
 
   <script>
-    // Info badge toggle
     document.addEventListener('DOMContentLoaded', function () {
-      var btn = document.getElementById('info-badge-btn');
-      var panel = document.getElementById('info-panel');
-      var closeBtn = document.getElementById('info-panel-close');
-      if (btn && panel) {
-        btn.addEventListener('click', function () {
-          panel.hidden = !panel.hidden;
+      // Tab navigation
+      var navTabs = document.querySelectorAll('.nav-tab');
+      var filterBar = document.getElementById('filter-bar');
+      var audienceBanner = document.getElementById('audience-banner');
+      var mainContent = document.querySelector('.main-content');
+
+      var allSections = ['about', 'methodology', 'summary'];
+
+      navTabs.forEach(function (tab) {
+        tab.addEventListener('click', function () {
+          var targetTab = tab.getAttribute('data-tab');
+
+          // Update active tab
+          navTabs.forEach(function (t) { t.classList.remove('active'); });
+          tab.classList.add('active');
+
+          // Show/hide explore elements
+          var isExplore = targetTab === 'explore';
+          if (filterBar) filterBar.style.display = isExplore ? '' : 'none';
+          if (audienceBanner) audienceBanner.style.display = isExplore ? '' : 'none';
+          if (mainContent) mainContent.style.display = isExplore ? '' : 'none';
+
+          // Show/hide section pages
+          allSections.forEach(function (s) {
+            var el = document.getElementById('section-' + s);
+            if (el) el.hidden = (s !== targetTab);
+          });
+
+          // Body scroll mode
+          if (isExplore) {
+            document.body.style.overflow = 'hidden';
+            document.body.style.height = '100vh';
+          } else {
+            document.body.style.overflow = 'auto';
+            document.body.style.height = 'auto';
+          }
         });
-      }
-      if (closeBtn && panel) {
-        closeBtn.addEventListener('click', function () {
-          panel.hidden = true;
-        });
-      }
+      });
     });
   </script>
 </body>

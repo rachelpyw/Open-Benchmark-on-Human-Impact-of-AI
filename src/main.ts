@@ -7,7 +7,7 @@ import {
   buildHierarchy,
   buildSubareaDetail,
 } from './data-loader';
-import { initSunburst, renderSunburst, updateSunburst, resetZoom, highlightAudienceAreas, clearAudienceHighlight } from './sunburst';
+import { initSunburst, renderSunburst, updateSunburst, resetZoom, highlightAudienceAreas, clearAudienceHighlight, resetZoomFull } from './sunburst';
 import { initControls, getCurrentFilters } from './controls';
 import { initTooltip } from './tooltip';
 import { initLeaderboard, selectLeaderboardModel, updateLeaderboardFilters } from './leaderboard';
@@ -16,7 +16,10 @@ import {
   showDefaultSummary,
   showAreaSummary,
   showSubareaSummary,
-} from './summary-panel';
+  setSidebarData,
+  navigateToArea,
+  navigateToSubarea,
+} from './sidebar';
 import { AREA_DESCRIPTIONS, SUBAREA_DESCRIPTIONS } from './descriptions';
 import { AUDIENCE_INFO } from './audience-info';
 
@@ -99,6 +102,10 @@ async function main(): Promise<void> {
     );
     updateModelNameLabel(initialModel?.name ?? currentFilters.model);
 
+    // Provide full taxonomy + scores to sidebar for deep navigation
+    const initialScores = getScoresForFilter(benchmarkData, currentFilters);
+    setSidebarData(taxonomy, initialScores);
+
     renderWithFilters(currentFilters, false);
 
     const loading = document.getElementById('loading');
@@ -147,6 +154,10 @@ function handleFilterChange(filters: FilterState): void {
   );
   updateModelNameLabel(activeModel?.name ?? filters.model);
 
+  // Re-sync sidebar with new scores
+  const newScores = getScoresForFilter(benchmarkData, filters);
+  setSidebarData(taxonomy, newScores);
+
   // Update audience banner and sunburst highlights
   updateAudienceBanner(filters.audience);
 }
@@ -166,6 +177,10 @@ function handleLeaderboardModelSelect(modelId: string): void {
     activeModel?.provider ?? ''
   );
   updateModelNameLabel(activeModel?.name ?? modelId);
+
+  // Sync sidebar scores so model strip updates immediately
+  const newScores = getScoresForFilter(benchmarkData, updatedFilters);
+  setSidebarData(taxonomy, newScores);
 }
 
 function handleSubareaClick(subareaId: string): void {
@@ -183,27 +198,31 @@ function handleSubareaClick(subareaId: string): void {
         valence: b.valence,
       }))
     );
+    // Navigate sidebar to subarea
+    navigateToSubarea(subareaId);
   }
 }
 
 function handleAreaClick(areaId: string): void {
+  // Look up area directly from taxonomy to avoid D3 sort order issues
+  const area = taxonomy.areas.find((a) => a.id === areaId);
+  if (!area) return;
+
   const scores = getScoresForFilter(benchmarkData, currentFilters);
-  const hierarchyData = buildHierarchy(taxonomy, scores);
-
-  const areaNode = hierarchyData.children?.find((a) => a.id === areaId);
-  if (!areaNode) return;
-
   const areaDesc = AREA_DESCRIPTIONS[areaId] ?? '';
-  const subareas = (areaNode.children ?? []).map((s) => ({
-    name: s.name,
-    score: s.score ?? 0,
-  }));
+  const subareas = area.subareas.map((s) => {
+    const subScores = s.behaviors.map((b) => scores[b.id] ?? 0);
+    const avg = subScores.length ? subScores.reduce((a, b) => a + b, 0) / subScores.length : 0;
+    return { name: s.name, score: avg };
+  });
 
-  showAreaSummary(areaId, areaNode.name, areaDesc, subareas);
+  showAreaSummary(areaId, area.name, areaDesc, subareas);
+  navigateToArea(areaId);
 }
 
 function handleCenterClick(): void {
   resetZoom();
+  resetZoomFull();
   const activeModel = models?.find((m) => m.id === currentFilters?.model);
   if (activeModel) {
     showDefaultSummary(activeModel.name, activeModel.provider);

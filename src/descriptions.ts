@@ -2,7 +2,7 @@
 // Used by tooltip.ts and summary-panel.ts
 
 export const AREA_DESCRIPTIONS: Record<string, string> = {
-  'self-actualization': 'How AI affects your ability to grow, find meaning, and reach your full human potential.',
+  'self-actualization': 'How AI shapes societal outcomes — creativity, autonomy, meaning, and collective human potential.',
   'psychological': 'How AI shapes your mental health, emotional well-being, and interpersonal relationships.',
   'physical-safety': 'How AI influences your physical health, safety, security, and basic needs.',
 };

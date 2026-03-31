@@ -2,7 +2,7 @@
   "areas": [
     {
       "id": "self-actualization",
-      "name": "Self Actualization",
+      "name": "Societal",
       "icon": "fa-mountain-sun",
       "color": "#7c3aed",
       "subareas": [
@@ -234,7 +234,7 @@
     },
     {
       "id": "physical-safety",
-      "name": "Physical Safety",
+      "name": "Physical",
       "icon": "fa-shield-heart",
       "color": "#059669",
       "subareas": [

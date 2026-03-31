@@ -35,7 +35,7 @@ export function showDefaultSummary(modelName: string, modelProvider: string): vo
     <div class="summary-section">
       <div class="summary-section-title">Well-being Areas</div>
       <div class="summary-area-item">
-        <div class="summary-area-name"><i class="fa-solid fa-mountain-sun"></i> Self Actualization</div>
+        <div class="summary-area-name"><i class="fa-solid fa-mountain-sun"></i> Societal</div>
         <div class="summary-area-desc">${escapeHtml(AREA_DESCRIPTIONS['self-actualization'] ?? '')}</div>
       </div>
       <div class="summary-area-item">
@@ -43,7 +43,7 @@ export function showDefaultSummary(modelName: string, modelProvider: string): vo
         <div class="summary-area-desc">${escapeHtml(AREA_DESCRIPTIONS['psychological'] ?? '')}</div>
       </div>
       <div class="summary-area-item">
-        <div class="summary-area-name"><i class="fa-solid fa-shield-heart"></i> Physical Safety</div>
+        <div class="summary-area-name"><i class="fa-solid fa-shield-heart"></i> Physical</div>
         <div class="summary-area-desc">${escapeHtml(AREA_DESCRIPTIONS['physical-safety'] ?? '')}</div>
       </div>
     </div>

@@ -9,11 +9,14 @@ const CENTER_R = 100;           // center image circle radius
 const RING1_INNER = 105;        // area ring inner radius
 const RING1_OUTER = 195;        // area ring outer radius
 const RING2_INNER = 200;        // subarea ring inner radius
-const RING2_OUTER = 295;        // subarea ring outer radius
-const RING3_INNER = 300;        // behavior ring inner radius
-const RING3_OUTER = 415;        // behavior ring outer radius
+const RING2_OUTER = 335;        // subarea ring outer radius (wider for text)
+const RING3_INNER = 340;        // behavior ring inner radius
+const RING3_OUTER = 455;        // behavior ring outer radius
 
 const TRANSITION_DURATION = 500;
+
+// Fixed viewBox radius — always shows the full outer ring regardless of SVG pixel size
+const VIEWBOX_R = RING2_OUTER + 40; // 375 — padding beyond the outer arc
 
 // ===== State =====
 
@@ -61,7 +64,9 @@ export function initSunburst(
   rootSvg
     .attr('width', svgSize)
     .attr('height', svgSize)
-    .attr('viewBox', `${-svgSize / 2} ${-svgSize / 2} ${svgSize} ${svgSize}`);
+    // Fixed viewBox so the chart always fits, scaling to pixel size
+    .attr('viewBox', `${-VIEWBOX_R} ${-VIEWBOX_R} ${VIEWBOX_R * 2} ${VIEWBOX_R * 2}`)
+    .attr('preserveAspectRatio', 'xMidYMid meet');
 
   g = rootSvg.append('g').attr('class', 'sunburst-g');
 
@@ -76,8 +81,8 @@ function updateLayout(): void {
 
   rootSvg
     .attr('width', size)
-    .attr('height', size)
-    .attr('viewBox', `${-size / 2} ${-size / 2} ${size} ${size}`);
+    .attr('height', size);
+  // viewBox stays fixed — chart scales to fit
 }
 
 // ===== Render =====
@@ -328,9 +333,9 @@ function drawLabels(nodes: ArcDatum[], parent: d3.Selection<SVGGElement, unknown
       .append('text')
       .attr('class', 'area-label')
       .style('fill', '#111827')
-      .style('font-size', '12px')
+      .style('font-size', '14px')
       .style('font-weight', '800')
-      .style('letter-spacing', '0.04em')
+      .style('letter-spacing', '0.05em')
       .style('pointer-events', 'none')
       .append('textPath')
       .attr('href', `#${pathId}`)
@@ -357,9 +362,9 @@ function drawLabels(nodes: ArcDatum[], parent: d3.Selection<SVGGElement, unknown
     const rotDeg = (angle * 180) / Math.PI - 90;
     const flip = angle > Math.PI ? 180 : 0;
 
-    // Estimate available characters: arc chord ≈ arcSpan * midR px, each char ~7px
-    const availPx = arcSpan * midR;
-    const maxChars = Math.max(5, Math.floor(availPx / 7.5));
+    // Available radial length = ring height; each char advances ~6.5px at 12px font
+    const ringHeight = RING2_OUTER - RING2_INNER;
+    const maxChars = Math.max(8, Math.floor(ringHeight / 6.5));
 
     labelsGroup
       .append('text')
@@ -367,7 +372,7 @@ function drawLabels(nodes: ArcDatum[], parent: d3.Selection<SVGGElement, unknown
       .attr('y', 0)
       .attr('transform', `translate(${px},${py}) rotate(${rotDeg + flip})`)
       .style('fill', '#1f2937')
-      .style('font-size', '10px')
+      .style('font-size', '12px')
       .style('font-weight', '600')
       .style('text-anchor', 'middle')
       .style('dominant-baseline', 'middle')

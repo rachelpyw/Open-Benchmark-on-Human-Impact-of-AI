@@ -20,7 +20,7 @@ export const AUDIENCE_INFO: Record<string, AudienceInfo> = {
     label: 'Students',
     icon: 'fa-graduation-cap',
     description:
-      'Students are especially impacted by AI\'s effects on learning, autonomy, and psychological health. Key concerns include cognitive offloading—letting AI replace active thinking—academic integrity, and whether AI tools foster genuine curiosity or shallow task completion. Examine the Self Actualization and Psychological areas closely.',
+      'Students are especially impacted by AI\'s effects on learning, autonomy, and psychological health. Key concerns include cognitive offloading—letting AI replace active thinking—academic integrity, and whether AI tools foster genuine curiosity or shallow task completion. Examine the Societal and Psychological areas closely.',
     priorityAreaIds: ['self-actualization', 'psychological'],
     focusPoints: ['Learning & Skill Development', 'Autonomy & Critical Thinking', 'Mental Health & Wellbeing'],
   },

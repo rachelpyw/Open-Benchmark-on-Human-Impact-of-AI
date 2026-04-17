@@ -93,77 +93,11 @@
     </div>
   </header>
 
-  <!-- Secondary sub-bar: filters/dropdowns -->
-  <div class="filter-bar" id="filter-bar">
-    <div class="filter-bar-inner">
-      <div class="filter-group">
-        <label for="filter-model" title="Select an AI model to visualize its human impact profile">AI Model</label>
-        <select id="filter-model" class="filter-select"></select>
-      </div>
-      <div class="filter-group">
-        <label for="filter-audience" title="Filter scores by the target audience type">Audience</label>
-        <select id="filter-audience" class="filter-select"></select>
-      </div>
-      <div class="filter-group">
-        <label for="filter-age" title="Filter scores by age group">Age Group</label>
-        <select id="filter-age" class="filter-select"></select>
-      </div>
-      <div class="filter-group">
-        <label for="filter-gender" title="Filter scores by gender">Gender</label>
-        <select id="filter-gender" class="filter-select"></select>
-      </div>
-    </div>
-  </div>
-
-  <!-- Audience context banner (shown when specific audience selected) -->
-  <div id="audience-banner"></div>
-
   <!-- Main 3-column content area -->
   <main class="main-content">
     <div class="viz-container">
 
-      <!-- LEFT: Summary Panel -->
-      <aside class="left-panel">
-        <div id="sb-model-strip"><!-- populated by JS --></div>
-        <div id="summary-panel">
-          <p class="summary-loading">Loading...</p>
-        </div>
-      </aside>
-
-      <!-- CENTER: Sunburst + Legend -->
-      <div class="sunburst-column">
-        <div class="model-name-label" id="model-name-label">Claude 3 Opus</div>
-        <div class="sunburst-wrapper" id="sunburst-wrapper">
-          <div id="loading" class="loading-state">
-            <div class="loading-spinner"></div>
-            <p>Loading data...</p>
-          </div>
-          <svg id="sunburst-svg"></svg>
-        </div>
-
-        <!-- Legend (pinned at bottom of center column) -->
-        <div class="legend-section">
-          <div class="legend-bar-wrapper">
-            <div class="legend-labels-top">
-              <span class="legend-label-left">← Harmful to Human Well-being</span>
-              <span class="legend-label-center">Neutral</span>
-              <span class="legend-label-right">Beneficial to Human Well-being →</span>
-            </div>
-            <div class="legend-bar-row">
-              <span class="legend-end-label red">Prohibit</span>
-              <div class="legend-gradient-bar">
-                <span class="legend-tick" style="left:0%">−1</span>
-                <span class="legend-tick" style="left:50%">0</span>
-                <span class="legend-tick" style="left:100%">+1</span>
-              </div>
-              <span class="legend-end-label green">Promote Human Flourishing</span>
-            </div>
-            <p class="legend-explainer">Scores represent average effect across behavioral indicators. −1 = AI consistently harms this dimension. 0 = No net effect. +1 = AI consistently benefits this dimension.</p>
-          </div>
-        </div>
-      </div>
-
-      <!-- RIGHT: Leaderboard -->
+      <!-- LEFT: Leaderboard -->
       <aside class="leaderboard" id="leaderboard">
         <div class="leaderboard-header">
           <h2 class="leaderboard-title">
@@ -181,6 +115,58 @@
         </div>
         <div class="leaderboard-list" id="leaderboard-list">
           <!-- Populated by JS -->
+        </div>
+      </aside>
+
+      <!-- CENTER: Sunburst + Legend -->
+      <div class="sunburst-column">
+        <div class="sunburst-wrapper" id="sunburst-wrapper">
+          <div id="loading" class="loading-state">
+            <div class="loading-spinner"></div>
+            <p>Loading data...</p>
+          </div>
+          <svg id="sunburst-svg"></svg>
+        </div>
+        <div class="model-name-label" id="model-name-label">Claude 3 Opus</div>
+        <!-- Legend (pinned at bottom of center column) -->
+        <div class="legend-section">
+          <div class="legend-bar-wrapper">
+            <div class="legend-bar-row">
+              <span class="legend-end-label red">−1</span>
+              <span class="legend-end-label red">Prohibit Human Flourishing</span>
+              <div class="legend-gradient-bar"></div>
+              <span class="legend-end-label green">Promote Human Flourishing</span>
+              <span class="legend-end-label green">+1</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- RIGHT: Summary Panel -->
+      <aside class="left-panel">
+        <div id="sb-model-strip"><!-- populated by JS --></div>
+        <!-- Filter dropdowns -->
+        <div class="filter-bar" id="filter-bar">
+          <select id="filter-model" class="filter-select" style="display:none"></select>
+          <div class="filter-bar-inner">
+            <div class="filter-group">
+              <label for="filter-audience" title="Filter scores by the target audience type">Audience</label>
+              <select id="filter-audience" class="filter-select"></select>
+            </div>
+            <div class="filter-group">
+              <label for="filter-age" title="Filter scores by age group">Age Group</label>
+              <select id="filter-age" class="filter-select"></select>
+            </div>
+            <div class="filter-group">
+              <label for="filter-gender" title="Filter scores by gender">Gender</label>
+              <select id="filter-gender" class="filter-select"></select>
+            </div>
+          </div>
+        </div>
+        <!-- Audience context banner -->
+        <div id="audience-banner"></div>
+        <div id="summary-panel">
+          <p class="summary-loading">Loading...</p>
         </div>
       </aside>
 

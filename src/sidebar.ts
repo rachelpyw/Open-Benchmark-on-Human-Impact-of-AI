@@ -328,23 +328,12 @@ function _updateModelStrip(): void {
   }
 
   strip.innerHTML = `
-    <div class="sb-strip-inner" style="background:${bgGradient}">
+    <div class="sb-strip-inner">
       <div class="sb-strip-top">
         <div style="min-width:0;flex:1">
           <div class="sb-strip-model-name">${_esc(_currentModelName)}</div>
-          <div class="sb-strip-model-provider">${_esc(_currentModelProvider)}</div>
         </div>
-        <span class="summary-score-pill ${scoreCls}" style="font-size:13px;flex-shrink:0">${_esc(scoreStr)}</span>
-      </div>
-      <div class="sb-strip-score-bar-wrapper">
-        <div class="sb-strip-score-track">
-          <div class="sb-strip-score-mid"></div>
-          <div class="sb-strip-score-fill ${scoreCls}" style="width:${fillPct}%"></div>
-        </div>
-        <div class="sb-strip-score-labels">
-          <span class="sb-strip-score-hint">Harmful</span>
-          <span class="sb-strip-score-hint">Beneficial</span>
-        </div>
+        <span class="summary-score-pill ${scoreCls}">${scoreStr}</span>
       </div>
     </div>
   `;
@@ -363,7 +352,6 @@ function _renderOverview(panel: HTMLElement): void {
     const interp = _scoreInterpretation(areaScore);
     return `
       <div class="area-card" data-area-id="${_esc(area.id)}"
-           style="border-left-color:${colors.color}"
            role="button" tabindex="0">
         <div class="area-card-top">
           <div class="area-card-header">
@@ -382,7 +370,6 @@ function _renderOverview(panel: HTMLElement): void {
       <div class="sb-section-header">Well-being Areas</div>
       <div class="summary-section" style="padding-top:6px">
         <div class="area-cards-list">${areaCards}</div>
-        <p class="summary-hint-text" style="margin-top:10px">Click an area card to explore</p>
       </div>
 
       <div class="sb-section-header">Score Scale</div>

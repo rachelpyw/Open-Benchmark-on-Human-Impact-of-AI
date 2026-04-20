@@ -61,7 +61,7 @@ function renderRankings(): void {
     row.className = 'lb-row';
     row.dataset.modelId = model.id;
 
-    const pct = Math.round(((score + 1) / 2) * 100);
+    const pct = Math.max(0, Math.min(100, ((score + 1) / 2) * 100));
     const colorHex = scoreToColor(score);
     const scoreClass = scoreToClass(score);
     const scoreStr = formatScore(score);
@@ -73,8 +73,9 @@ function renderRankings(): void {
         <div class="lb-name">${model.name}</div>
         <div class="lb-provider">${model.provider}</div>
       </div>
-      <div class="lb-bar-track">
-        <div class="lb-bar-fill" style="width:${pct}%;background:${colorHex}"></div>
+      <div class="lb-scale-track" aria-hidden="true">
+        <div class="lb-scale-zero"></div>
+        <div class="lb-scale-marker ${scoreClass}" style="left:${pct}%;background:${colorHex}"></div>
       </div>
       <span class="lb-score-badge ${scoreClass}">${scoreStr}</span>
     `;

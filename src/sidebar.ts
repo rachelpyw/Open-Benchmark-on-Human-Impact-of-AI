@@ -11,6 +11,8 @@ import type { Taxonomy } from './types';
 import { formatScore, scoreToClass } from './color-scale';
 import { AREA_DESCRIPTIONS, SUBAREA_DESCRIPTIONS } from './descriptions';
 import { generateScenarios } from './chatlog-generator';
+import html2canvas from 'html2canvas';
+import { jsPDF } from 'jspdf';
 
 // ===== Audience Area Insights =====
 
@@ -83,7 +85,7 @@ let _taxonomy: Taxonomy | null = null;
 let _scores: Record<string, number> = {};
 let _currentAudience = 'generic';
 let _currentModelName = '';
-let _currentModelProvider = '';
+let _exportOverlay: HTMLElement | null = null;
 
 type NavLevel =
   | { type: 'overview' }
@@ -129,9 +131,8 @@ export function initSummaryPanel(): void {
   _navStack = [{ type: 'overview' }];
 }
 
-export function showDefaultSummary(modelName: string, provider: string): void {
+export function showDefaultSummary(modelName: string, _provider: string): void {
   _currentModelName = modelName;
-  _currentModelProvider = provider;
   _navStack = [{ type: 'overview' }];
   _updateModelStrip();
   _renderCurrent(false);
@@ -182,6 +183,15 @@ function _renderCurrent(forward: boolean): void {
   if (!panel) return;
 
   const top = _navStack[_navStack.length - 1];
+  const chromeHost = panel.closest('.left-panel');
+  const isFocusedView = top.type !== 'overview';
+  if (chromeHost) {
+    chromeHost.classList.toggle('focus-mode', isFocusedView);
+  }
+  if (!isFocusedView) {
+    _closeNutritionPreview();
+  }
+
   const animClass = forward ? 'sidebar-push-forward' : 'sidebar-push-back';
   panel.classList.remove('sidebar-push-forward', 'sidebar-push-back', 'sidebar-slide-in', 'sidebar-slide-back');
   void panel.offsetWidth;
@@ -283,7 +293,10 @@ function _stickyNavHead(
   depthCls: string = ''
 ): string {
   const backBtn = _navStack.length > 1
-    ? `<div class="sb-back-bar"><button class="sidebar-back-btn" aria-label="Go back"><i class="fa-solid fa-arrow-left"></i> Back</button></div>`
+    ? `<div class="sb-back-bar">
+        <button class="sidebar-back-btn" aria-label="Go back"><i class="fa-solid fa-arrow-left"></i> Back</button>
+        <button class="sidebar-save-btn" aria-label="Open nutrition label preview"><i class="fa-solid fa-floppy-disk"></i> Save</button>
+      </div>`
     : '';
   return `<div class="sb-sticky-header">${backBtn}${_titleSection(levelLabel, currentName, currentIcon, currentScore, depthCls)}</div>`;
 }
@@ -293,6 +306,9 @@ function _bindBackAndAncestors(panel: HTMLElement): void {
   const backBtn = panel.querySelector<HTMLButtonElement>('.sidebar-back-btn');
   if (backBtn) backBtn.addEventListener('click', _goBack);
 
+  const saveBtn = panel.querySelector<HTMLButtonElement>('.sidebar-save-btn');
+  if (saveBtn) saveBtn.addEventListener('click', _openNutritionPreview);
+
   panel.querySelectorAll<HTMLElement>('.sb-anc-row').forEach((row) => {
     const idx = parseInt(row.dataset.navIdx ?? '', 10);
     if (!isNaN(idx)) {
@@ -300,6 +316,366 @@ function _bindBackAndAncestors(panel: HTMLElement): void {
       row.addEventListener('keydown', (e) => { if ((e as KeyboardEvent).key === 'Enter') _navigateToStackIndex(idx); });
     }
   });
+}
+
+type ExportContext = {
+  level: string;
+  focusName: string;
+  focusScore: number;
+  areaName: string;
+  subareaName: string;
+  behaviorName: string;
+  scenarioName: string;
+  audienceLabel: string;
+  ageLabel: string;
+  genderLabel: string;
+  indicators: number;
+  beneficialCount: number;
+  harmfulCount: number;
+  neutralCount: number;
+  overallScore: number;
+  positiveAvg: number;
+  negativeAvg: number;
+  focusInterpretation: string;
+  beneficialShare: string;
+  harmfulShare: string;
+  neutralShare: string;
+  topBeneficial: { name: string; score: number }[];
+  topHarmful: { name: string; score: number }[];
+};
+
+function _openNutritionPreview(): void {
+  const ctx = _buildExportContext();
+  if (!ctx) return;
+
+  const topBeneficialRows = ctx.topBeneficial.length
+    ? ctx.topBeneficial
+      .map((item) => `<div class="nutrition-signal-row"><span>${_esc(item.name)}</span><span>${formatScore(item.score)}</span></div>`)
+      .join('')
+    : '<div class="nutrition-signal-row"><span>No strongly beneficial signals in this scope</span><span>--</span></div>';
+
+  const topHarmfulRows = ctx.topHarmful.length
+    ? ctx.topHarmful
+      .map((item) => `<div class="nutrition-signal-row"><span>${_esc(item.name)}</span><span>${formatScore(item.score)}</span></div>`)
+      .join('')
+    : '<div class="nutrition-signal-row"><span>No strongly harmful signals in this scope</span><span>--</span></div>';
+
+  _closeNutritionPreview();
+
+  const overlay = document.createElement('div');
+  overlay.className = 'nutrition-overlay';
+  overlay.innerHTML = `
+    <div class="nutrition-modal" role="dialog" aria-modal="true" aria-label="Nutrition label preview">
+      <button class="nutrition-close-btn" aria-label="Close nutrition label preview"><i class="fa-solid fa-xmark"></i></button>
+      <div class="nutrition-scroll-wrap">
+        <div class="nutrition-label" id="nutrition-label-card">
+          <div class="nutrition-headline">AI Nutrition Label</div>
+          <div class="nutrition-subline">Deep dive snapshot</div>
+
+          <div class="nutrition-model-block">
+            <div class="nutrition-model-kicker">Model focus</div>
+            <div class="nutrition-model-name">${_esc(ctx.focusName)}</div>
+          </div>
+
+          <div class="nutrition-thick-rule"></div>
+
+          <div class="nutrition-meta-grid">
+            <div><span class="nutrition-meta-label">Level</span><span class="nutrition-meta-value">${_esc(ctx.level)}</span></div>
+            <div><span class="nutrition-meta-label">Audience</span><span class="nutrition-meta-value">${_esc(ctx.audienceLabel)}</span></div>
+            <div><span class="nutrition-meta-label">Age Group</span><span class="nutrition-meta-value">${_esc(ctx.ageLabel)}</span></div>
+            <div><span class="nutrition-meta-label">Gender</span><span class="nutrition-meta-value">${_esc(ctx.genderLabel)}</span></div>
+          </div>
+
+          <div class="nutrition-thin-rule"></div>
+
+          <div class="nutrition-score-row">
+            <div class="nutrition-score-label">Net Impact Score</div>
+            <div class="nutrition-score-value ${scoreToClass(ctx.focusScore)}">${formatScore(ctx.focusScore)}</div>
+          </div>
+
+          <div class="nutrition-thick-rule"></div>
+
+          <div class="nutrition-table-head">
+            <span>Deep-dive parameter</span>
+            <span>Value</span>
+          </div>
+
+          <div class="nutrition-table-row"><span>Area</span><span>${_esc(ctx.areaName)}</span></div>
+          <div class="nutrition-table-row"><span>Subarea</span><span>${_esc(ctx.subareaName)}</span></div>
+          <div class="nutrition-table-row"><span>Behavior</span><span>${_esc(ctx.behaviorName)}</span></div>
+          <div class="nutrition-table-row"><span>Scenario</span><span>${_esc(ctx.scenarioName)}</span></div>
+          <div class="nutrition-table-row"><span>Total indicators</span><span>${ctx.indicators}</span></div>
+          <div class="nutrition-table-row"><span>Beneficial indicators</span><span>${ctx.beneficialCount} (${ctx.beneficialShare})</span></div>
+          <div class="nutrition-table-row"><span>Harmful indicators</span><span>${ctx.harmfulCount} (${ctx.harmfulShare})</span></div>
+          <div class="nutrition-table-row"><span>Neutral indicators</span><span>${ctx.neutralCount} (${ctx.neutralShare})</span></div>
+          <div class="nutrition-table-row"><span>Avg beneficial score</span><span>${formatScore(ctx.positiveAvg)}</span></div>
+          <div class="nutrition-table-row"><span>Avg harmful score</span><span>${formatScore(ctx.negativeAvg)}</span></div>
+          <div class="nutrition-table-row nutrition-table-row-bold"><span>Model overall score</span><span>${formatScore(ctx.overallScore)}</span></div>
+
+          <div class="nutrition-thin-rule"></div>
+          <div class="nutrition-signal-block">
+            <div class="nutrition-signal-title">Top Beneficial Signals</div>
+            ${topBeneficialRows}
+          </div>
+
+          <div class="nutrition-signal-block">
+            <div class="nutrition-signal-title">Top Harmful Signals</div>
+            ${topHarmfulRows}
+          </div>
+
+          <div class="nutrition-thick-rule"></div>
+          <div class="nutrition-footnote">
+            ${_esc(ctx.focusInterpretation)}. This preview summarizes the active deep-dive context from the human flourishing benchmark.
+          </div>
+        </div>
+      </div>
+      <div class="nutrition-actions">
+        <button class="nutrition-save-pdf-btn"><i class="fa-solid fa-file-pdf"></i> Save PDF</button>
+      </div>
+    </div>
+  `;
+
+  document.body.appendChild(overlay);
+  _exportOverlay = overlay;
+
+  const closeBtn = overlay.querySelector<HTMLButtonElement>('.nutrition-close-btn');
+  if (closeBtn) closeBtn.addEventListener('click', _closeNutritionPreview);
+
+  const savePdfBtn = overlay.querySelector<HTMLButtonElement>('.nutrition-save-pdf-btn');
+  if (savePdfBtn) {
+    savePdfBtn.addEventListener('click', async () => {
+      await _saveNutritionPdf(ctx.focusName);
+    });
+  }
+
+  overlay.addEventListener('click', (e) => {
+    if (e.target === overlay) _closeNutritionPreview();
+  });
+}
+
+function _closeNutritionPreview(): void {
+  if (_exportOverlay) {
+    _exportOverlay.remove();
+    _exportOverlay = null;
+  }
+}
+
+async function _saveNutritionPdf(focusName: string): Promise<void> {
+  const label = document.getElementById('nutrition-label-card');
+  if (!label) return;
+
+  const saveBtn = _exportOverlay?.querySelector<HTMLButtonElement>('.nutrition-save-pdf-btn');
+  if (saveBtn) {
+    saveBtn.disabled = true;
+    saveBtn.textContent = 'Saving...';
+  }
+
+  try {
+    const canvas = await html2canvas(label, {
+      scale: 2,
+      backgroundColor: '#ffffff',
+      useCORS: true,
+    });
+
+    const pdf = new jsPDF({ orientation: 'portrait', unit: 'pt', format: 'letter' });
+    const pageWidth = pdf.internal.pageSize.getWidth();
+    const pageHeight = pdf.internal.pageSize.getHeight();
+    const margin = 28;
+    const maxWidth = pageWidth - margin * 2;
+    const maxHeight = pageHeight - margin * 2;
+
+    const ratio = Math.min(maxWidth / canvas.width, maxHeight / canvas.height);
+    const imageWidth = canvas.width * ratio;
+    const imageHeight = canvas.height * ratio;
+    const x = (pageWidth - imageWidth) / 2;
+    const y = (pageHeight - imageHeight) / 2;
+
+    pdf.addImage(canvas.toDataURL('image/png'), 'PNG', x, y, imageWidth, imageHeight);
+    pdf.save(`${_slugify(focusName || _currentModelName || 'nutrition-label')}.pdf`);
+  } finally {
+    if (saveBtn) {
+      saveBtn.disabled = false;
+      saveBtn.innerHTML = '<i class="fa-solid fa-file-pdf"></i> Save PDF';
+    }
+  }
+}
+
+function _buildExportContext(): ExportContext | null {
+  if (!_taxonomy || _navStack.length <= 1) return null;
+
+  const top = _navStack[_navStack.length - 1];
+  const levelMap: Record<NavLevel['type'], string> = {
+    overview: 'Overview',
+    area: 'Well-being Area',
+    subarea: 'Subarea',
+    behavior: 'Behavior Indicator',
+    chatlog: 'Test Scenario',
+  };
+
+  let areaName = 'N/A';
+  let subareaName = 'N/A';
+  let behaviorName = 'N/A';
+  let scenarioName = 'N/A';
+  let focusScore = 0;
+  let behaviorIds: string[] = [];
+
+  let areaId: string | null = null;
+  let subareaId: string | null = null;
+  let behaviorId: string | null = null;
+  let scenarioIndex: number | null = null;
+
+  for (const level of _navStack) {
+    if (level.type === 'area') areaId = level.areaId;
+    if (level.type === 'subarea') subareaId = level.subareaId;
+    if (level.type === 'behavior') behaviorId = level.behaviorId;
+    if (level.type === 'chatlog') {
+      behaviorId = level.behaviorId;
+      scenarioIndex = level.scenarioIndex;
+    }
+  }
+
+  if (areaId) {
+    const area = _taxonomy.areas.find((a) => a.id === areaId);
+    if (area) {
+      areaName = area.name;
+      if (top.type === 'area') {
+        focusScore = _computeAreaScore(areaId);
+        behaviorIds = area.subareas.flatMap((s) => s.behaviors.map((b) => b.id));
+      }
+    }
+  }
+
+  if (subareaId) {
+    for (const area of _taxonomy.areas) {
+      const sub = area.subareas.find((s) => s.id === subareaId);
+      if (!sub) continue;
+      areaName = area.name;
+      subareaName = sub.name;
+      if (top.type === 'subarea') {
+        focusScore = _computeSubareaScore(subareaId);
+        behaviorIds = sub.behaviors.map((b) => b.id);
+      }
+      break;
+    }
+  }
+
+  if (behaviorId) {
+    for (const area of _taxonomy.areas) {
+      for (const sub of area.subareas) {
+        const beh = sub.behaviors.find((b) => b.id === behaviorId);
+        if (!beh) continue;
+        areaName = area.name;
+        subareaName = sub.name;
+        behaviorName = beh.name;
+        behaviorIds = [behaviorId];
+
+        if (top.type === 'behavior') {
+          focusScore = _scores[behaviorId] ?? 0;
+        }
+
+        if (top.type === 'chatlog' && scenarioIndex !== null) {
+          const scenarios = generateScenarios(behaviorId, beh.name, beh.valence, _scores[behaviorId] ?? 0);
+          const selectedScenario = scenarios[scenarioIndex];
+          scenarioName = selectedScenario?.title ?? `Scenario ${scenarioIndex + 1}`;
+          focusScore = selectedScenario?.overallScore ?? (_scores[behaviorId] ?? 0);
+        }
+        break;
+      }
+      if (behaviorName !== 'N/A') break;
+    }
+  }
+
+  const usableIds = behaviorIds.filter((id) => _scores[id] !== undefined);
+  const values = usableIds.map((id) => _scores[id]);
+  const beneficialCount = values.filter((v) => v > 0.05).length;
+  const harmfulCount = values.filter((v) => v < -0.05).length;
+  const neutralCount = Math.max(values.length - beneficialCount - harmfulCount, 0);
+  const positiveScores = values.filter((v) => v > 0.05);
+  const negativeScores = values.filter((v) => v < -0.05);
+  const positiveAvg = positiveScores.length
+    ? positiveScores.reduce((sum, value) => sum + value, 0) / positiveScores.length
+    : 0;
+  const negativeAvg = negativeScores.length
+    ? negativeScores.reduce((sum, value) => sum + value, 0) / negativeScores.length
+    : 0;
+
+  const scopeEntries = usableIds.map((id) => ({
+    name: _findBehavior(id)?.behavior.name ?? id,
+    score: _scores[id],
+  }));
+
+  const topBeneficial = scopeEntries
+    .filter((entry) => entry.score > 0.05)
+    .sort((a, b) => b.score - a.score)
+    .slice(0, 3);
+
+  const topHarmful = scopeEntries
+    .filter((entry) => entry.score < -0.05)
+    .sort((a, b) => a.score - b.score)
+    .slice(0, 3);
+
+  const modelVals = Object.values(_scores);
+  const overallScore = modelVals.length ? modelVals.reduce((a, b) => a + b, 0) / modelVals.length : 0;
+
+  return {
+    level: levelMap[top.type],
+    focusName: _currentModelName || 'Selected Model',
+    focusScore,
+    areaName,
+    subareaName,
+    behaviorName,
+    scenarioName,
+    audienceLabel: _selectLabel('filter-audience', {
+      generic: 'General Population',
+      student: 'Students',
+      professional: 'Professionals',
+      elderly: 'Elderly',
+      vulnerable: 'Vulnerable Groups',
+    }),
+    ageLabel: _selectLabel('filter-age', {
+      adult: 'Adult (18-64)',
+      youth: 'Youth (13-17)',
+      child: 'Child (6-12)',
+      senior: 'Senior (65+)',
+    }),
+    genderLabel: _selectLabel('filter-gender', {
+      all: 'All Genders',
+      male: 'Male',
+      female: 'Female',
+      nonbinary: 'Non-binary',
+    }),
+    indicators: values.length,
+    beneficialCount,
+    harmfulCount,
+    neutralCount,
+    overallScore,
+    positiveAvg,
+    negativeAvg,
+    focusInterpretation: _scoreInterpretation(focusScore),
+    beneficialShare: _formatShare(beneficialCount, values.length),
+    harmfulShare: _formatShare(harmfulCount, values.length),
+    neutralShare: _formatShare(neutralCount, values.length),
+    topBeneficial,
+    topHarmful,
+  };
+}
+
+function _formatShare(count: number, total: number): string {
+  if (!total) return '0%';
+  return `${Math.round((count / total) * 100)}%`;
+}
+
+function _selectLabel(id: string, map: Record<string, string>): string {
+  const select = document.getElementById(id) as HTMLSelectElement | null;
+  if (!select) return 'N/A';
+  return map[select.value] ?? select.value;
+}
+
+function _slugify(input: string): string {
+  return input
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/^-+|-+$/g, '') || 'nutrition-label';
 }
 
 // ===== Sticky Model Strip =====
@@ -314,18 +690,6 @@ function _updateModelStrip(): void {
 
   const scoreCls = overallScore > 0.05 ? 'positive' : overallScore < -0.05 ? 'negative' : 'neutral';
   const scoreStr = overallScore > 0 ? `+${overallScore.toFixed(2)}` : overallScore.toFixed(2);
-  const fillPct = Math.min(Math.abs(overallScore) * 50, 50); // 0..50% of half-track
-
-  let bgGradient: string;
-  if (overallScore > 0.05) {
-    const a = Math.min(0.12 + Math.abs(overallScore) * 0.32, 0.42);
-    bgGradient = `linear-gradient(135deg, rgba(187,247,208,${a}), rgba(249,250,251,0))`;
-  } else if (overallScore < -0.05) {
-    const a = Math.min(0.12 + Math.abs(overallScore) * 0.32, 0.42);
-    bgGradient = `linear-gradient(135deg, rgba(254,202,202,${a}), rgba(249,250,251,0))`;
-  } else {
-    bgGradient = 'linear-gradient(135deg, #f3f4f6, #f9fafb)';
-  }
 
   strip.innerHTML = `
     <div class="sb-strip-inner">
@@ -348,7 +712,6 @@ function _renderOverview(panel: HTMLElement): void {
     const areaScore = _computeAreaScore(area.id);
     const cls = scoreToClass(areaScore);
     const scoreStr = formatScore(areaScore);
-    const colors = _scoreColors(areaScore);
     const interp = _scoreInterpretation(areaScore);
     return `
       <div class="area-card" data-area-id="${_esc(area.id)}"

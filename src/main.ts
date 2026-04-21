@@ -22,6 +22,7 @@ import {
 } from './sidebar';
 import { AREA_DESCRIPTIONS, SUBAREA_DESCRIPTIONS } from './descriptions';
 import { AUDIENCE_INFO } from './audience-info';
+import './smart-nutrition';
 
 // ===== Model Name Label =====
 
@@ -200,8 +201,18 @@ function handleSubareaClick(subareaId: string): void {
     );
     // Navigate sidebar to subarea
     navigateToSubarea(subareaId);
+    // Notify smart-explore layer (inline script) so it can inject focus extras
+    try {
+      window.dispatchEvent(new CustomEvent('smart-subarea-opened', { detail: { subareaId } }));
+    } catch {
+      /* ignore */
+    }
   }
 }
+
+// Expose for inline smart-explore script
+(window as unknown as { __openSubarea?: (id: string) => void }).__openSubarea =
+  handleSubareaClick;
 
 function handleAreaClick(areaId: string): void {
   // Look up area directly from taxonomy to avoid D3 sort order issues

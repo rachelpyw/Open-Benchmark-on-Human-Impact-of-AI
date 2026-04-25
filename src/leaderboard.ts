@@ -1,5 +1,5 @@
 import type { AIModel, BenchmarkData, Taxonomy } from './types';
-import { scoreToColor, formatScore, scoreToClass } from './color-scale';
+import { formatScore, scoreToClass } from './color-scale';
 import { makeBenchmarkKey } from './data-loader';
 
 // ===== Module State =====

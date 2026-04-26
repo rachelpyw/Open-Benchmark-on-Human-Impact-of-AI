@@ -15,52 +15,67 @@
   <!-- ===== Landing / Gate Page ===== -->
   <div id="app-gate" class="gate-page" style="display:none">
 
-    <!-- Hero -->
-    <section class="gate-hero">
-      <div class="gate-hero-left">
-        <div class="gate-hero-tag">
-          <span class="gate-tag-dot"></span> Open Benchmark · MIT Media Lab
-        </div>
-        <h1 class="gate-hero-title">Open Benchmark on<br>Human Impact of AI</h1>
-        <p class="gate-hero-tagline"><em>Human Impact Bench</em> — Does AI make humans <em>flourish</em>?</p>
-        <p class="gate-hero-desc">
-          The first open benchmark measuring AI's impact on human well-being — across Physical, Psychological, and Societal dimensions. Built by researchers at MIT, USC, and UC Berkeley, with 260+ behavioral indicators across 18+ leading AI models.
+    <!-- Hero (Vercel-style centered layout) -->
+    <section class="gate-hero gate-hero--centered">
+      <div class="gate-hero-content">
+        <h1 class="gate-hero-title">Open Benchmark of<br>AI Impact on Humans</h1>
+
+        <p class="gate-hero-rotator" id="gate-rotator-line">
+          How does using AI
+          <span class="gate-rotator-word" id="gate-rotator-btn">
+            <span class="gate-rotator-text" aria-live="polite"></span><span class="gate-rotator-caret" aria-hidden="true"></span>
+          </span>?
         </p>
 
-        <!-- Enter flow -->
-        <div class="gate-ctas" id="gate-ctas">
-          <button class="gate-btn-primary" id="gate-show-pw-btn">
-            <i class="fa-solid fa-lock-open"></i> Enter App
+        <p class="gate-hero-desc gate-hero-desc--centered">
+          The first open benchmark measuring AI's impact on human well-being across physical, psychological, and societal dimensions.
+        </p>
+
+        <!-- CTAs -->
+        <div class="gate-ctas gate-ctas--centered" id="gate-ctas">
+          <button class="gate-btn-primary" onclick="window.openGateTab && window.openGateTab('request')">
+            <i class="fa-solid fa-key"></i> Request Access
           </button>
-          <button class="gate-btn-secondary" onclick="document.getElementById('gate-section-request').scrollIntoView({behavior:'smooth'})">
-            Request Access <i class="fa-solid fa-arrow-down"></i>
-          </button>
-        </div>
-        <div class="gate-pw-row" id="gate-pw-row" hidden>
-          <input id="gate-input" type="password" placeholder="Enter access code…" class="gate-pw-input" autocomplete="off" />
-          <button id="gate-btn" class="gate-pw-submit">
-            <i class="fa-solid fa-arrow-right"></i>
+          <button class="gate-btn-secondary" onclick="window.openGateTab && window.openGateTab('support')">
+            <i class="fa-solid fa-hand-holding-heart"></i> Support Us
           </button>
         </div>
-        <div id="gate-error" class="gate-error" hidden>Incorrect code — please try again.</div>
+        <!-- Hidden helper retained for legacy auth flow handlers -->
+        <button id="gate-show-pw-btn" hidden></button>
       </div>
 
-      <div class="gate-hero-right">
-        <!-- Animated sunburst visualization -->
+      <!-- Animated sunburst visualization, below the title block -->
+      <div class="gate-hero-visual">
+        <div class="gate-visual-glow" aria-hidden="true"></div>
         <div id="gate-sunburst-container" class="gate-sunburst-container"></div>
       </div>
     </section>
 
-    <!-- Stats strip -->
-    <div class="gate-stats-strip">
-      <div class="gate-stat"><span class="gate-stat-num">260+</span><span class="gate-stat-label">Behavioral Indicators</span></div>
-      <div class="gate-stat-divider"></div>
-      <div class="gate-stat"><span class="gate-stat-num">18+</span><span class="gate-stat-label">AI Models Evaluated</span></div>
-      <div class="gate-stat-divider"></div>
-      <div class="gate-stat"><span class="gate-stat-num">3</span><span class="gate-stat-label">Well-being Dimensions</span></div>
-      <div class="gate-stat-divider"></div>
-      <div class="gate-stat"><span class="gate-stat-num">4</span><span class="gate-stat-label">Audience Groups</span></div>
-    </div>
+    <!-- Stats cards -->
+    <section class="gate-stats-cards">
+      <div class="gate-stats-cards-inner">
+        <div class="gate-stat-card">
+          <div class="gate-stat-card-num">260+</div>
+          <div class="gate-stat-card-label">Behavioral Indicators</div>
+          <p class="gate-stat-card-desc">Tested across realistic scenarios.</p>
+        </div>
+        <div class="gate-stat-card">
+          <div class="gate-stat-card-num">18+</div>
+          <div class="gate-stat-card-label">AI Models Evaluated</div>
+          <p class="gate-stat-card-desc">Compared on the same standard.</p>
+        </div>
+        <div class="gate-stat-card">
+          <div class="gate-stat-card-num">3</div>
+          <div class="gate-stat-card-label">Well-being Dimensions</div>
+          <p class="gate-stat-card-desc">Physical, psychological, societal.</p>
+        </div>
+        <div class="gate-stat-card">
+          <div class="gate-stat-card-num">4</div>
+          <div class="gate-stat-card-label">Audience Groups</div>
+          <p class="gate-stat-card-desc">Parents, educators, policymakers, developers.</p>
+        </div>
+      </div>
+    </section>
 
     <!-- Rationale & Methodology -->
     <section class="gate-info-strip">
@@ -68,166 +83,189 @@
         <div class="gate-info-card">
           <div class="gate-info-label"><i class="fa-solid fa-circle-question"></i> Why It Matters</div>
           <h2 class="gate-info-title">The Rationale</h2>
-          <p class="gate-info-body">Today's AI benchmarks measure accuracy, speed, and task completion — but reveal nothing about what happens to the human on the other side of the screen. We're building the first open standard that asks: does AI actually make people's lives better?</p>
+          <p class="gate-info-body">Today's AI benchmarks measure what models can do — accuracy, speed, reasoning, task completion. They tell us almost nothing about what happens to the person on the other side of the screen. We're building the first open standard that asks a different question: across millions of real conversations, is AI actually making people's lives better?</p>
           <ul class="gate-info-points">
-            <li>AI is deployed at scale with no agreed way to measure its effect on human well-being</li>
-            <li>No existing benchmark covers all three domains: Physical, Psychological, and Societal</li>
-            <li>Developers, policymakers, and users all need a shared, independent signal they can trust</li>
-            <li>Human flourishing — not just task performance — is the right north star for responsible AI</li>
+            <li>AI is being adopted faster than any technology in history, yet there's no shared, independent way to measure its effect on human well-being</li>
+            <li>Models that ace conventional safety benchmarks have still produced harmful outcomes in over 70% of high-risk scenarios in controlled studies</li>
+            <li>No existing benchmark covers all three domains where impact unfolds: Physical, Psychological, and Societal</li>
+            <li>Developers, policymakers, clinicians, and everyday users need a common signal they can trust — one not produced by the companies being evaluated</li>
+            <li>Human flourishing, not task performance, is the right north star for responsible AI</li>
           </ul>
         </div>
         <div class="gate-info-card">
           <div class="gate-info-label"><i class="fa-solid fa-flask"></i> How It Works</div>
           <h2 class="gate-info-title">The Methodology</h2>
-          <p class="gate-info-body">Scores reflect how consistently an AI model exhibits each behavioral indicator across 260+ realistic multi-turn scenarios, graded by LLM-as-judge systems validated against human raters.</p>
+          <p class="gate-info-body">Scores reflect how consistently a model supports — or undermines — human flourishing across 260+ realistic, multi-turn scenarios. Each conversation is simulated with a demographically varied user pursuing a latent goal, then graded by LLM-as-judge systems validated against expert human raters.</p>
           <ul class="gate-info-points">
             <li><strong>+1</strong> — behavior reliably <span style="color:#16a34a;font-weight:700">promotes</span> human flourishing</li>
             <li><strong>0</strong> — behavior is <span style="color:#6b7280;font-weight:700">neutral</span> or inconsistent</li>
             <li><strong>−1</strong> — behavior reliably <span style="color:#dc2626;font-weight:700">harms</span> human flourishing</li>
-            <li>Scores are averaged across audience groups, age ranges, and gender profiles</li>
-            <li>Framework grounded in the Harvard Human Flourishing Program and 80+ expert workshops</li>
+            <li>Every metric is tested across age groups, gender profiles, and audience contexts to surface where harms concentrate</li>
+            <li>Scenarios unfold over multiple turns to capture relational, time-extended dynamics that single-prompt benchmarks miss</li>
+            <li>Framework grounded in the Harvard Human Flourishing Program, eudaimonic psychology, and 80+ expert workshops with clinicians, ethicists, educators, and affected communities</li>
           </ul>
         </div>
       </div>
     </section>
 
-    <!-- Public: Request Access form -->
-    <section class="gate-public-section" id="gate-section-request">
-      <div class="gate-public-inner">
-        <div class="gate-section-label"><i class="fa-solid fa-key"></i> Early Access</div>
-        <h2 class="gate-section-title">Request Access</h2>
-        <p class="gate-section-desc">The full benchmark dataset and evaluation API are available to vetted researchers and institutions.</p>
-        <div class="form-card gate-form-card" id="gate-access-card">
-          <form class="bench-form" id="gate-access-form" novalidate>
-            <div class="form-row">
-              <div class="form-group">
-                <label class="form-label" for="gac-name">Full name <span class="form-required">*</span></label>
-                <input class="form-input" type="text" id="gac-name" placeholder="Dr. Jane Smith" required />
+    <!-- Public: Tabbed forms (Request Access / Support / Feedback) -->
+    <section class="gate-public-section gate-tabs-section" id="gate-tabs-section">
+      <div class="gate-public-inner gate-tabs-inner">
+        <div class="gate-tabs-nav" role="tablist" aria-label="Get involved">
+          <button class="gate-tab-btn is-active" role="tab" data-gate-tab="request" id="gate-tab-request" aria-selected="true">
+            <i class="fa-solid fa-key"></i> Request Access
+          </button>
+          <button class="gate-tab-btn" role="tab" data-gate-tab="support" id="gate-tab-support" aria-selected="false">
+            <i class="fa-solid fa-hand-holding-heart"></i> Support Benchmarking Efforts
+          </button>
+          <button class="gate-tab-btn" role="tab" data-gate-tab="feedback" id="gate-tab-feedback" aria-selected="false">
+            <i class="fa-solid fa-comment-dots"></i> Feedback
+          </button>
+        </div>
+
+        <!-- Request Access panel -->
+        <div class="gate-tab-panel is-active" id="gate-panel-request" role="tabpanel" aria-labelledby="gate-tab-request">
+          <h2 class="gate-section-title">Request Access</h2>
+          <p class="gate-section-desc">The full benchmark dataset and evaluation API are available to vetted researchers and institutions.</p>
+          <div class="form-card gate-form-card" id="gate-access-card">
+            <form class="bench-form" id="gate-access-form" novalidate>
+              <div class="form-row">
+                <div class="form-group">
+                  <label class="form-label" for="gac-name">Full name <span class="form-required">*</span></label>
+                  <input class="form-input" type="text" id="gac-name" placeholder="Dr. Jane Smith" required />
+                </div>
+                <div class="form-group">
+                  <label class="form-label" for="gac-email">Email <span class="form-required">*</span></label>
+                  <input class="form-input" type="email" id="gac-email" placeholder="you@institution.edu" required />
+                </div>
+              </div>
+              <div class="form-row">
+                <div class="form-group">
+                  <label class="form-label" for="gac-affiliation">Institution <span class="form-required">*</span></label>
+                  <input class="form-input" type="text" id="gac-affiliation" placeholder="MIT Media Lab" required />
+                </div>
+                <div class="form-group">
+                  <label class="form-label" for="gac-role">Role <span class="form-required">*</span></label>
+                  <input class="form-input" type="text" id="gac-role" placeholder="Assistant Professor" required />
+                </div>
               </div>
               <div class="form-group">
-                <label class="form-label" for="gac-email">Email <span class="form-required">*</span></label>
-                <input class="form-input" type="email" id="gac-email" placeholder="you@institution.edu" required />
+                <label class="form-label" for="gac-use">How do you plan to use the benchmark? <span class="form-required">*</span></label>
+                <textarea class="form-input form-textarea" id="gac-use" rows="3" placeholder="Describe your research goals…" required></textarea>
               </div>
+              <button type="submit" class="form-submit-btn">
+                <i class="fa-solid fa-paper-plane"></i> Submit Request
+              </button>
+            </form>
+            <div class="form-success" id="gate-access-success" hidden>
+              <div class="form-success-icon">✅</div>
+              <h3>Request received!</h3>
+              <p>We'll be in touch within 5 business days.</p>
             </div>
-            <div class="form-row">
-              <div class="form-group">
-                <label class="form-label" for="gac-affiliation">Institution <span class="form-required">*</span></label>
-                <input class="form-input" type="text" id="gac-affiliation" placeholder="MIT Media Lab" required />
+          </div>
+        </div>
+
+        <!-- Support panel -->
+        <div class="gate-tab-panel" id="gate-panel-support" role="tabpanel" aria-labelledby="gate-tab-support" hidden>
+          <h2 class="gate-section-title">Support Benchmarking Efforts</h2>
+          <p class="gate-section-desc">Help us build an open, independent standard for measuring AI's impact on human flourishing.</p>
+          <p class="gate-section-link">For more information on how to submit your own benchmark, <a href="https://www.media.mit.edu/projects/the-open-benchmark-for-the-human-impact-of-ai/overview/" target="_blank" rel="noopener noreferrer">click here</a></p>
+          <div class="gate-support-grid">
+            <div class="gate-support-card"><i class="fa-solid fa-bullhorn"></i><strong>Advocacy</strong><span>Spread the word and champion human-centered AI evaluation</span></div>
+            <div class="gate-support-card"><i class="fa-solid fa-microscope"></i><strong>Research Collab</strong><span>Co-develop benchmarks or contribute datasets</span></div>
+            <div class="gate-support-card"><i class="fa-solid fa-circle-dollar-to-slot"></i><strong>Financial Support</strong><span>Philanthropic funding keeps the benchmark open</span></div>
+            <div class="gate-support-card"><i class="fa-solid fa-puzzle-piece"></i><strong>Other</strong><span>Media, policy, infrastructure — all forms welcome</span></div>
+          </div>
+          <div class="form-card gate-form-card" id="gate-support-card">
+            <form class="bench-form" id="gate-support-form" novalidate>
+              <div class="form-row">
+                <div class="form-group">
+                  <label class="form-label" for="gsp-name">Name <span class="form-required">*</span></label>
+                  <input class="form-input" type="text" id="gsp-name" placeholder="Your full name" required />
+                </div>
+                <div class="form-group">
+                  <label class="form-label" for="gsp-contact">Contact <span class="form-required">*</span></label>
+                  <input class="form-input" type="text" id="gsp-contact" placeholder="Email or phone" required />
+                </div>
               </div>
               <div class="form-group">
-                <label class="form-label" for="gac-role">Role <span class="form-required">*</span></label>
-                <input class="form-input" type="text" id="gac-role" placeholder="Assistant Professor" required />
+                <label class="form-label" for="gsp-affiliation">Affiliation</label>
+                <input class="form-input" type="text" id="gsp-affiliation" placeholder="Organization or institution" />
               </div>
+              <div class="form-group">
+                <label class="form-label" for="gsp-how">How would you like to support? <span class="form-required">*</span></label>
+                <textarea class="form-input form-textarea" id="gsp-how" rows="3" placeholder="Describe your ideas or questions…" required></textarea>
+              </div>
+              <div class="form-group">
+                <label class="form-label">Areas of support <span class="form-hint">(select all that apply)</span></label>
+                <div class="form-checklist">
+                  <label class="form-check-item"><input type="checkbox" class="form-checkbox" /><span class="form-check-box"></span><span class="form-check-label"><strong>Advocacy</strong></span></label>
+                  <label class="form-check-item"><input type="checkbox" class="form-checkbox" /><span class="form-check-box"></span><span class="form-check-label"><strong>Research Collaboration</strong></span></label>
+                  <label class="form-check-item"><input type="checkbox" class="form-checkbox" /><span class="form-check-box"></span><span class="form-check-label"><strong>Financial Support</strong></span></label>
+                  <label class="form-check-item"><input type="checkbox" class="form-checkbox" /><span class="form-check-box"></span><span class="form-check-label"><strong>Other</strong></span></label>
+                </div>
+              </div>
+              <button type="submit" class="form-submit-btn form-submit-btn--green">
+                <i class="fa-solid fa-hand-holding-heart"></i> Submit
+              </button>
+            </form>
+            <div class="form-success" id="gate-support-success" hidden>
+              <div class="form-success-icon">🌱</div>
+              <h3>Thank you!</h3>
+              <p>We'll be in touch soon.</p>
             </div>
-            <div class="form-group">
-              <label class="form-label" for="gac-use">How do you plan to use the benchmark? <span class="form-required">*</span></label>
-              <textarea class="form-input form-textarea" id="gac-use" rows="3" placeholder="Describe your research goals…" required></textarea>
+          </div>
+        </div>
+
+        <!-- Feedback panel -->
+        <div class="gate-tab-panel" id="gate-panel-feedback" role="tabpanel" aria-labelledby="gate-tab-feedback" hidden>
+          <h2 class="gate-section-title">Feedback</h2>
+          <p class="gate-section-desc">Help us improve the benchmark — no access code required.</p>
+          <div class="form-card gate-form-card" id="gate-feedback-card">
+            <form class="bench-form" id="gate-feedback-form" novalidate>
+              <div class="form-group">
+                <label class="form-label" for="gfb-topic">Topic <span class="form-required">*</span></label>
+                <select class="form-input form-select" id="gfb-topic" required>
+                  <option value="">Select a topic…</option>
+                  <option>Benchmark methodology</option>
+                  <option>Data accuracy or scores</option>
+                  <option>Visualization / UI</option>
+                  <option>Missing AI model</option>
+                  <option>Missing benchmark dimension</option>
+                  <option>Other</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label class="form-label" for="gfb-message">Your feedback <span class="form-required">*</span></label>
+                <textarea class="form-input form-textarea" id="gfb-message" rows="4" placeholder="Tell us what you think…" required></textarea>
+              </div>
+              <div class="form-group">
+                <label class="form-label" for="gfb-email">Email <span class="form-hint">(optional)</span></label>
+                <input class="form-input" type="email" id="gfb-email" placeholder="you@example.com" />
+              </div>
+              <button type="submit" class="form-submit-btn">
+                <i class="fa-solid fa-paper-plane"></i> Send Feedback
+              </button>
+            </form>
+            <div class="form-success" id="gate-feedback-success" hidden>
+              <div class="form-success-icon">🎉</div>
+              <h3>Thank you!</h3>
+              <p>We read every submission.</p>
             </div>
-            <button type="submit" class="form-submit-btn">
-              <i class="fa-solid fa-paper-plane"></i> Submit Request
-            </button>
-          </form>
-          <div class="form-success" id="gate-access-success" hidden>
-            <div class="form-success-icon">✅</div>
-            <h3>Request received!</h3>
-            <p>We'll be in touch within 5 business days.</p>
           </div>
         </div>
       </div>
     </section>
 
-    <!-- Public: Support form -->
-    <section class="gate-public-section gate-public-section--alt" id="gate-section-support">
-      <div class="gate-public-inner">
-        <div class="gate-section-label"><i class="fa-solid fa-hand-holding-heart"></i> Get Involved</div>
-        <h2 class="gate-section-title">Support the Benchmark</h2>
-        <p class="gate-section-desc">Help us build an open, independent standard for measuring AI's impact on human flourishing.</p>
-        <div class="gate-support-grid">
-          <div class="gate-support-card"><i class="fa-solid fa-bullhorn"></i><strong>Advocacy</strong><span>Spread the word and champion human-centered AI evaluation</span></div>
-          <div class="gate-support-card"><i class="fa-solid fa-microscope"></i><strong>Research Collab</strong><span>Co-develop benchmarks or contribute datasets</span></div>
-          <div class="gate-support-card"><i class="fa-solid fa-circle-dollar-to-slot"></i><strong>Financial Support</strong><span>Philanthropic funding keeps the benchmark open</span></div>
-          <div class="gate-support-card"><i class="fa-solid fa-puzzle-piece"></i><strong>Other</strong><span>Media, policy, infrastructure — all forms welcome</span></div>
-        </div>
-        <div class="form-card gate-form-card" id="gate-support-card">
-          <form class="bench-form" id="gate-support-form" novalidate>
-            <div class="form-row">
-              <div class="form-group">
-                <label class="form-label" for="gsp-name">Name <span class="form-required">*</span></label>
-                <input class="form-input" type="text" id="gsp-name" placeholder="Your full name" required />
-              </div>
-              <div class="form-group">
-                <label class="form-label" for="gsp-contact">Contact <span class="form-required">*</span></label>
-                <input class="form-input" type="text" id="gsp-contact" placeholder="Email or phone" required />
-              </div>
-            </div>
-            <div class="form-group">
-              <label class="form-label" for="gsp-affiliation">Affiliation</label>
-              <input class="form-input" type="text" id="gsp-affiliation" placeholder="Organization or institution" />
-            </div>
-            <div class="form-group">
-              <label class="form-label" for="gsp-how">How would you like to support? <span class="form-required">*</span></label>
-              <textarea class="form-input form-textarea" id="gsp-how" rows="3" placeholder="Describe your ideas or questions…" required></textarea>
-            </div>
-            <div class="form-group">
-              <label class="form-label">Areas of support <span class="form-hint">(select all that apply)</span></label>
-              <div class="form-checklist">
-                <label class="form-check-item"><input type="checkbox" class="form-checkbox" /><span class="form-check-box"></span><span class="form-check-label"><strong>Advocacy</strong></span></label>
-                <label class="form-check-item"><input type="checkbox" class="form-checkbox" /><span class="form-check-box"></span><span class="form-check-label"><strong>Research Collaboration</strong></span></label>
-                <label class="form-check-item"><input type="checkbox" class="form-checkbox" /><span class="form-check-box"></span><span class="form-check-label"><strong>Financial Support</strong></span></label>
-                <label class="form-check-item"><input type="checkbox" class="form-checkbox" /><span class="form-check-box"></span><span class="form-check-label"><strong>Other</strong></span></label>
-              </div>
-            </div>
-            <button type="submit" class="form-submit-btn form-submit-btn--green">
-              <i class="fa-solid fa-hand-holding-heart"></i> Submit
-            </button>
-          </form>
-          <div class="form-success" id="gate-support-success" hidden>
-            <div class="form-success-icon">🌱</div>
-            <h3>Thank you!</h3>
-            <p>We'll be in touch soon.</p>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- Public: Feedback form -->
-    <section class="gate-public-section" id="gate-section-feedback">
-      <div class="gate-public-inner">
-        <div class="gate-section-label"><i class="fa-solid fa-comment-dots"></i> Share Your Thoughts</div>
-        <h2 class="gate-section-title">Feedback</h2>
-        <p class="gate-section-desc">Help us improve the benchmark — no access code required.</p>
-        <div class="form-card gate-form-card" id="gate-feedback-card">
-          <form class="bench-form" id="gate-feedback-form" novalidate>
-            <div class="form-group">
-              <label class="form-label" for="gfb-topic">Topic <span class="form-required">*</span></label>
-              <select class="form-input form-select" id="gfb-topic" required>
-                <option value="">Select a topic…</option>
-                <option>Benchmark methodology</option>
-                <option>Data accuracy or scores</option>
-                <option>Visualization / UI</option>
-                <option>Missing AI model</option>
-                <option>Missing benchmark dimension</option>
-                <option>Other</option>
-              </select>
-            </div>
-            <div class="form-group">
-              <label class="form-label" for="gfb-message">Your feedback <span class="form-required">*</span></label>
-              <textarea class="form-input form-textarea" id="gfb-message" rows="4" placeholder="Tell us what you think…" required></textarea>
-            </div>
-            <div class="form-group">
-              <label class="form-label" for="gfb-email">Email <span class="form-hint">(optional)</span></label>
-              <input class="form-input" type="email" id="gfb-email" placeholder="you@example.com" />
-            </div>
-            <button type="submit" class="form-submit-btn">
-              <i class="fa-solid fa-paper-plane"></i> Send Feedback
-            </button>
-          </form>
-          <div class="form-success" id="gate-feedback-success" hidden>
-            <div class="form-success-icon">🎉</div>
-            <h3>Thank you!</h3>
-            <p>We read every submission.</p>
-          </div>
-        </div>
+    <!-- Partner / institution logos -->
+    <section class="gate-partners">
+      <p class="gate-partners-title">Led by researchers at</p>
+      <div class="gate-partners-row">
+        <img src="/images/MIT Logo.png"                                       alt="MIT" class="gate-partner-logo" />
+        <img src="/images/ML logo.png"                                        alt="MIT Media Lab" class="gate-partner-logo" />
+        <img src="/images/USC-Logo.png"                                       alt="USC" class="gate-partner-logo" />
+        <img src="/images/PTI+Logo+updated.webp"                              alt="Psychology of Technology Institute" class="gate-partner-logo" />
+        <img src="/images/UC-Berkeley-Haas-logo-digital_stacked-blue.png"     alt="UC Berkeley Haas" class="gate-partner-logo" />
       </div>
     </section>
 
@@ -288,21 +326,11 @@
         window.scrollTo(0, 0);
         // Ensure sunburst is initialized
         if (typeof _runGateSunburst === 'function') _runGateSunburst();
-        // Already authenticated → swap CTA to "Back to App"
+        // Already authenticated → show CTAs (Request Access / Support Us); hide legacy pw row
         var ctas   = document.getElementById('gate-ctas');
         var pwRow  = document.getElementById('gate-pw-row');
-        var showPwBtn = document.getElementById('gate-show-pw-btn');
         if (ctas)  ctas.hidden  = false;
         if (pwRow) pwRow.hidden = true;
-        if (showPwBtn) {
-          showPwBtn.innerHTML = '<i class="fa-solid fa-arrow-left"></i> Back to App';
-          showPwBtn.onclick = function (e) {
-            e.preventDefault();
-            showApp();
-            var exploreTab = document.querySelector('[data-tab="explore"]');
-            if (exploreTab) exploreTab.click();
-          };
-        }
       };
 
       if (sessionStorage.getItem('aib-auth') === '1') {
@@ -569,6 +597,130 @@
         document.addEventListener('DOMContentLoaded', _runGateSunburst);
       } else {
         _runGateSunburst();
+      }
+
+      // ===== Rotating subtitle ("How does using AI ___?") with typing animation =====
+      function _runGateRotator() {
+        var btn = document.getElementById('gate-rotator-btn');
+        var textEl = btn && btn.querySelector('.gate-rotator-text');
+        if (!btn || !textEl) return;
+
+        var PHRASES = [
+          'as a therapist impact mental health',
+          'for emotional support shape loneliness',
+          'as a daily companion affect anxiety',
+          'in friendships change how teens connect',
+          'in dating apps reshape relationships',
+          'in family conversations affect trust',
+          "in the classroom impact students' learning",
+          'in hiring affect equal opportunity',
+          'in journalism shape what we believe'
+        ];
+
+        var TYPE_MS = 38;     // per-character typing speed
+        var ERASE_MS = 18;    // per-character erase speed
+        var HOLD_MS = 1800;   // pause after fully typed
+        var idx = 0;
+
+        function typeIn(text, done) {
+          var i = 0;
+          textEl.textContent = '';
+          (function step() {
+            if (i <= text.length) {
+              textEl.textContent = text.slice(0, i);
+              i++;
+              setTimeout(step, TYPE_MS);
+            } else {
+              setTimeout(done, HOLD_MS);
+            }
+          })();
+        }
+
+        function eraseOut(done) {
+          var current = textEl.textContent;
+          var i = current.length;
+          (function step() {
+            if (i >= 0) {
+              textEl.textContent = current.slice(0, i);
+              i--;
+              setTimeout(step, ERASE_MS);
+            } else {
+              done();
+            }
+          })();
+        }
+
+        function loop() {
+          typeIn(PHRASES[idx], function () {
+            eraseOut(function () {
+              idx = (idx + 1) % PHRASES.length;
+              loop();
+            });
+          });
+        }
+
+        loop();
+      }
+      if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', _runGateRotator);
+      } else {
+        _runGateRotator();
+      }
+
+      // ===== Scroll-aware nav (transparent over hero, solid after scroll) =====
+      function _wireGateScrollNav() {
+        var bar = document.getElementById('control-bar');
+        if (!bar) return;
+        var update = function () {
+          if (!document.body.classList.contains('gate-mode')) {
+            bar.classList.remove('is-scrolled');
+            return;
+          }
+          if (window.scrollY > 8) bar.classList.add('is-scrolled');
+          else bar.classList.remove('is-scrolled');
+        };
+        window.addEventListener('scroll', update, { passive: true });
+        update();
+      }
+      if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', _wireGateScrollNav);
+      } else {
+        _wireGateScrollNav();
+      }
+
+      // ===== Gate forms tab switcher =====
+      function _wireGateTabs() {
+        var btns   = document.querySelectorAll('.gate-tab-btn');
+        var panels = document.querySelectorAll('.gate-tab-panel');
+        if (!btns.length) return;
+
+        function open(id) {
+          btns.forEach(function (b) {
+            var active = b.getAttribute('data-gate-tab') === id;
+            b.classList.toggle('is-active', active);
+            b.setAttribute('aria-selected', active ? 'true' : 'false');
+          });
+          panels.forEach(function (p) {
+            var active = p.id === 'gate-panel-' + id;
+            p.classList.toggle('is-active', active);
+            p.hidden = !active;
+          });
+          var section = document.getElementById('gate-tabs-section');
+          if (section) section.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+
+        btns.forEach(function (b) {
+          b.addEventListener('click', function () {
+            open(b.getAttribute('data-gate-tab'));
+          });
+        });
+
+        window.openGateTab = open;
+      }
+      if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', _wireGateTabs);
+      } else {
+        _wireGateTabs();
       }
     })();
   </script>
@@ -1353,6 +1505,25 @@
   <!-- Tooltip -->
   <div class="tooltip" id="tooltip" role="tooltip" aria-hidden="true"></div>
 
+  <!-- Explore access modal (blurry overlay covering Explore page) -->
+  <div class="explore-gate-overlay" id="explore-gate-overlay" hidden>
+    <div class="explore-gate-modal" role="dialog" aria-modal="true" aria-labelledby="explore-gate-title">
+      <button type="button" class="explore-gate-close" id="explore-gate-close" aria-label="Close">
+        <i class="fa-solid fa-xmark"></i>
+      </button>
+      <div class="explore-gate-icon"><i class="fa-solid fa-lock"></i></div>
+      <h2 class="explore-gate-title" id="explore-gate-title">Enter password to access our beta platform</h2>
+      <form class="explore-gate-form" id="explore-gate-form" autocomplete="off">
+        <input type="password" id="explore-gate-input" class="explore-gate-input" placeholder="Password" autocomplete="off" />
+        <button type="submit" class="explore-gate-submit">Unlock</button>
+      </form>
+      <div class="explore-gate-error" id="explore-gate-error" hidden>Incorrect password — please try again.</div>
+      <button type="button" class="explore-gate-request" id="explore-gate-request">
+        Don't have a password? <span>Request access →</span>
+      </button>
+    </div>
+  </div>
+
   <script type="module" src="/src/main.ts"></script>
   <script>
     document.addEventListener('DOMContentLoaded', function () {
@@ -1391,12 +1562,17 @@
           // Transitioning from gate to another tab
           if (gateVisible) {
             if (targetTab === 'explore' && sessionStorage.getItem('aib-auth') !== '1') {
-              // Explore requires auth — scroll to top and show password
-              window.scrollTo({ top: 0, behavior: 'smooth' });
-              setTimeout(function () {
-                var showPwBtn = document.getElementById('gate-show-pw-btn');
-                if (showPwBtn) showPwBtn.click();
-              }, 300);
+              // Hide gate, show Explore page with blurry password overlay
+              if (window._hideGate) window._hideGate();
+              navTabs.forEach(function (t) { t.classList.remove('active'); });
+              tab.classList.add('active');
+              if (filterBar) filterBar.style.display = '';
+              if (audienceBanner) audienceBanner.style.display = '';
+              if (mainContent) mainContent.style.display = '';
+              if (aboutPage) aboutPage.hidden = true;
+              document.body.style.overflow = 'hidden';
+              document.body.style.height = '100vh';
+              if (window._showExploreGate) window._showExploreGate();
               return;
             }
             // About (and other tabs) allowed without auth — hide gate
@@ -1431,9 +1607,15 @@
           if (isExplore) {
             document.body.style.overflow = 'hidden';
             document.body.style.height = '100vh';
+            if (sessionStorage.getItem('aib-auth') !== '1') {
+              if (window._showExploreGate) window._showExploreGate();
+            } else {
+              if (window._hideExploreGate) window._hideExploreGate();
+            }
           } else {
             document.body.style.overflow = 'auto';
             document.body.style.height = 'auto';
+            if (window._hideExploreGate) window._hideExploreGate();
           }
         });
       });
@@ -1447,6 +1629,58 @@
           if (content) content.scrollTop = 0;
         });
       });
+
+      // ===== Explore gate modal =====
+      (function () {
+        var overlay = document.getElementById('explore-gate-overlay');
+        var form    = document.getElementById('explore-gate-form');
+        var input   = document.getElementById('explore-gate-input');
+        var err     = document.getElementById('explore-gate-error');
+        var reqBtn  = document.getElementById('explore-gate-request');
+        if (!overlay || !form || !input) return;
+
+        window._showExploreGate = function () {
+          overlay.hidden = false;
+          if (err) err.hidden = true;
+          input.value = '';
+          setTimeout(function () { input.focus(); }, 50);
+        };
+        window._hideExploreGate = function () { overlay.hidden = true; };
+
+        form.addEventListener('submit', function (e) {
+          e.preventDefault();
+          if (input.value === 'flourishing') {
+            sessionStorage.setItem('aib-auth', '1');
+            window._hideExploreGate();
+          } else {
+            if (err) err.hidden = false;
+            input.value = '';
+            input.focus();
+          }
+        });
+
+        if (reqBtn) {
+          reqBtn.addEventListener('click', function () {
+            window._hideExploreGate();
+            // Switch to Home tab and open the Request Access form
+            var homeTab = document.querySelector('[data-tab="home"]');
+            if (homeTab) homeTab.click();
+            setTimeout(function () {
+              if (window.openGateTab) window.openGateTab('request');
+            }, 120);
+          });
+        }
+
+        var closeBtn = document.getElementById('explore-gate-close');
+        if (closeBtn) {
+          closeBtn.addEventListener('click', function () {
+            window._hideExploreGate();
+            // Return to homepage
+            var homeTab = document.querySelector('[data-tab="home"]');
+            if (homeTab) homeTab.click();
+          });
+        }
+      })();
 
       // ===== Form interactions =====
 

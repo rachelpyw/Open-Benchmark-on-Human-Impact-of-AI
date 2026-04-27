@@ -2507,11 +2507,11 @@ body.gate-mode #control-bar {
 }
 
 body.gate-mode #control-bar.is-scrolled {
-  background: rgba(255, 255, 255, 0.85);
-  -webkit-backdrop-filter: blur(12px);
-  backdrop-filter: blur(12px);
-  border-bottom-color: var(--border);
-  box-shadow: var(--shadow-sm);
+  background: rgba(255, 255, 255, 0.55);
+  -webkit-backdrop-filter: saturate(160%) blur(16px);
+  backdrop-filter: saturate(160%) blur(16px);
+  border-bottom-color: rgba(0, 0, 0, 0.06);
+  box-shadow: 0 1px 6px rgba(0, 0, 0, 0.04);
 }
 
 body.gate-mode #app-gate {
@@ -4366,12 +4366,12 @@ body.gate-mode #smart-explore-overlay {
   white-space: nowrap;
 }
 .metric-type-pos {
-  background: #dcfce7;
-  color: #16a34a;
+  background: #f1f5f9;
+  color: #475569;
 }
 .metric-type-neg {
-  background: #fee2e2;
-  color: #dc2626;
+  background: #f1f5f9;
+  color: #475569;
 }
 
 .behavior-row-name {
@@ -5201,11 +5201,11 @@ body.about-mode #control-bar {
   transition: background 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease;
 }
 body.about-mode #control-bar.is-scrolled {
-  background: rgba(255, 255, 255, 0.85);
-  -webkit-backdrop-filter: blur(12px);
-  backdrop-filter: blur(12px);
-  border-bottom-color: var(--border);
-  box-shadow: var(--shadow-sm);
+  background: rgba(255, 255, 255, 0.55);
+  -webkit-backdrop-filter: saturate(160%) blur(16px);
+  backdrop-filter: saturate(160%) blur(16px);
+  border-bottom-color: rgba(0, 0, 0, 0.06);
+  box-shadow: 0 1px 6px rgba(0, 0, 0, 0.04);
 }
 body.about-mode #about-page {
   padding-top: 60px;
@@ -5340,3 +5340,30 @@ body.about-mode #about-page {
 .gate-sb-tip-ex i { margin-top: 3px; font-size: 10px; }
 .gate-sb-tip-ex.pos i { color: #16a34a; }
 .gate-sb-tip-ex.neg i { color: #ef4444; }
+
+/* ===== Global score tooltip ===== */
+[data-score-tip] { cursor: help; }
+.score-tip {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 10000;
+  pointer-events: none;
+  max-width: 260px;
+  padding: 10px 12px;
+  background: rgba(17, 24, 39, 0.96);
+  color: #f5f5f5;
+  border-radius: 8px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.22);
+  font-size: 12px;
+  line-height: 1.45;
+  opacity: 0;
+  transform: translateY(2px);
+  transition: opacity 0.12s ease, transform 0.12s ease;
+  -webkit-backdrop-filter: blur(8px);
+  backdrop-filter: blur(8px);
+}
+.score-tip.visible {
+  opacity: 1;
+  transform: translateY(0);
+}

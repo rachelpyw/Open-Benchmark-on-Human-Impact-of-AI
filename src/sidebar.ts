@@ -296,6 +296,15 @@ function _titleSection(
       : "";
 
   const scoreStr = currentScore !== null ? formatScore(currentScore) : "";
+  const lvl = levelLabel.toUpperCase();
+  const scoreTip =
+    lvl.indexOf("AREA") === 0 || lvl === "WELL-BEING AREA"
+      ? `Area score: flat mean of every metric score under this area, for the selected model and age group. Range 0–1 (higher = more flourishing-aligned behavior).`
+      : lvl === "SUBAREA"
+      ? `Subarea score: mean of all metric scores in this subarea, for the selected model and age group. Range 0–1.`
+      : lvl === "METRIC"
+      ? `Metric score: average score across all scenario × variant evaluations of this behavior, for the selected model and age group. Range 0–1.`
+      : "";
 
   return `
     <div class="sb-title-section ${_esc(depthCls)}"
@@ -306,7 +315,7 @@ function _titleSection(
       <div class="sidebar-title-name">
         ${currentIcon ? `<i class="fa-solid ${_esc(currentIcon)}"></i>` : ""}
         <span>${_esc(currentName)}</span>
-        ${scoreStr ? `<span class="sb-title-score">${scoreStr}</span>` : ""}
+        ${scoreStr ? `<span class="sb-title-score" data-score-tip="${_esc(scoreTip)}">${scoreStr}</span>` : ""}
       </div>
     </div>
   `;
@@ -708,7 +717,7 @@ function _updateModelStrip(): void {
         <div style="min-width:0;flex:1">
           <div class="sb-strip-model-name">${_esc(_currentModelName)}</div>
         </div>
-        <span class="summary-score-pill neutral">${scoreStr}</span>
+        <span class="summary-score-pill neutral" data-score-tip="Model overall score: flat mean of every metric score this model received for the selected age group. Each metric score is itself the average across many scenario × variant evaluations. Range 0–1 (higher = more flourishing-aligned behavior).">${scoreStr}</span>
       </div>
     </div>
   `;
@@ -802,7 +811,7 @@ function _renderArea(panel: HTMLElement, areaId: string): void {
         <div class="subarea-row-main">
           <span class="subarea-row-icon"><i class="fa-solid ${_esc(sub.icon)}"></i></span>
           <span class="subarea-row-name">${_esc(sub.name)}</span>
-          <span class="summary-score-pill neutral">${_esc(str)}</span>
+          <span class="summary-score-pill neutral" data-score-tip="Subarea score: mean of all metric scores in this subarea, for the selected model and age group. Range 0–1.">${_esc(str)}</span>
         </div>
         ${subDesc ? `<div class="subarea-row-def">${_esc(subDesc)}</div>` : ""}
       </div>
@@ -904,7 +913,7 @@ function _renderSubarea(panel: HTMLElement, subareaId: string): void {
       <div class="behavior-row" data-metric-id="${_esc(m.id)}" data-metric-name="${_esc(m.name)}" role="button" tabindex="0">
         ${typeTag}
         <span class="behavior-row-name">${_esc(m.name)}</span>
-        <span class="summary-score-pill neutral">${_esc(str)}</span>
+        <span class="summary-score-pill neutral" data-score-tip="Metric score: average across all scenario × variant evaluations of this behavior, for the selected model and age group. Range 0–1.">${_esc(str)}</span>
         <span class="behavior-row-arrow">›</span>
       </div>
     `;
@@ -926,7 +935,7 @@ function _renderSubarea(panel: HTMLElement, subareaId: string): void {
         <div class="sb-section-header">Score Breakdown</div>
         <div class="summary-section" style="padding-top:4px">
           <div class="summary-dual-bars">
-            <div class="summary-bar-group">
+            <div class="summary-bar-group" data-score-tip="Good behavior score: mean of the ${posMetrics.length} non-harmful (‘Promote’) metrics in this subarea, for the selected model and age group. Range 0–1; higher = better.">
               <div class="summary-bar-header">
                 <span class="summary-bar-label positive-label">Good behavior</span>
                 <span class="summary-bar-count">${posMetrics.length} metrics</span>
@@ -939,7 +948,7 @@ function _renderSubarea(panel: HTMLElement, subareaId: string): void {
             ${
               hasHarmful
                 ? `
-            <div class="summary-bar-group">
+            <div class="summary-bar-group" data-score-tip="Harmful-behavior avoidance: 1 minus the mean of the ${negMetrics.length} harmful (‘Avoid’) metrics in this subarea, for the selected model and age group. Range 0–1; higher = the model avoids these behaviors more.">
               <div class="summary-bar-header">
                 <span class="summary-bar-label negative-label">Harmful behavior</span>
                 <span class="summary-bar-count">${negMetrics.length} metrics</span>

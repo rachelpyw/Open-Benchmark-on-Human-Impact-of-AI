@@ -23,6 +23,46 @@ import {
 import { AREA_DESCRIPTIONS, SUBAREA_DESCRIPTIONS } from './descriptions';
 import './smart-nutrition';
 
+// ===== Global score tooltip =====
+function initScoreTooltip(): void {
+  const tip = document.createElement('div');
+  tip.className = 'score-tip';
+  tip.setAttribute('role', 'tooltip');
+  document.body.appendChild(tip);
+  let active: Element | null = null;
+
+  const hide = () => { tip.classList.remove('visible'); active = null; };
+
+  const position = (el: Element) => {
+    const r = (el as HTMLElement).getBoundingClientRect();
+    tip.style.maxWidth = '260px';
+    // Render to measure
+    const tw = tip.offsetWidth;
+    const th = tip.offsetHeight;
+    let top = r.top - th - 10;
+    let left = r.left + r.width / 2 - tw / 2;
+    if (top < 8) top = r.bottom + 10;
+    if (left < 8) left = 8;
+    if (left + tw > window.innerWidth - 8) left = window.innerWidth - tw - 8;
+    tip.style.top = top + 'px';
+    tip.style.left = left + 'px';
+  };
+
+  document.addEventListener('mouseover', (e) => {
+    const t = (e.target as Element | null)?.closest?.('[data-score-tip]');
+    if (!t || t === active) return;
+    active = t;
+    tip.textContent = (t as HTMLElement).getAttribute('data-score-tip') ?? '';
+    tip.classList.add('visible');
+    position(t);
+  });
+  document.addEventListener('mouseout', (e) => {
+    const t = (e.target as Element | null)?.closest?.('[data-score-tip]');
+    if (t && t === active) hide();
+  });
+  document.addEventListener('scroll', hide, true);
+}
+
 // ===== Model Name Label =====
 
 function updateModelNameLabel(name: string): void {
@@ -205,4 +245,4 @@ function handleCenterClick(): void {
 
 // ===== Start =====
 
-document.addEventListener('DOMContentLoaded', main);
+document.addEventListener('DOMContentLoaded', () => { main(); initScoreTooltip(); });

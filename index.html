@@ -3,11 +3,11 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Human Impact Bench</title>
+  <title>Human-AI Impact Bench</title>
   <link rel="icon" href="/images/MIT_Social-Media-Logo_Light-Green.png" type="image/png">
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Source+Serif+Pro:wght@400;500;600;700&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" crossorigin="anonymous" />
   <link rel="stylesheet" href="/styles/main.css" />
 </head>
@@ -81,25 +81,23 @@
     <section class="gate-info-strip">
       <div class="gate-info-inner">
         <div class="gate-info-card">
-          <div class="gate-info-label"><i class="fa-solid fa-circle-question"></i> Why It Matters</div>
           <h2 class="gate-info-title">The Rationale</h2>
-          <p class="gate-info-body">Today's AI benchmarks measure what models can do — accuracy, speed, reasoning, task completion. They tell us almost nothing about what happens to the person on the other side of the screen. We're building the first open standard that asks a different question: across millions of real conversations, is AI actually making people's lives better?</p>
+          <p class="gate-info-body">Today's AI benchmarks measure what models can do, accuracy, speed, reasoning, task completion. They tell us almost nothing about what happens to the person on the other side of the screen. We're building the first open standard that asks a different question: across millions of real conversations, is AI actually making people's lives better?</p>
           <ul class="gate-info-points">
             <li>AI is being adopted faster than any technology in history, yet there's no shared, independent way to measure its effect on human well-being</li>
             <li>Models that ace conventional safety benchmarks have still produced harmful outcomes in over 70% of high-risk scenarios in controlled studies</li>
             <li>No existing benchmark covers all three domains where impact unfolds: Physical, Psychological, and Societal</li>
-            <li>Developers, policymakers, clinicians, and everyday users need a common signal they can trust — one not produced by the companies being evaluated</li>
+            <li>Developers, policymakers, clinicians, and everyday users need a common signal they can trust, one not produced by the companies being evaluated</li>
             <li>Human flourishing, not task performance, is the right north star for responsible AI</li>
           </ul>
         </div>
         <div class="gate-info-card">
-          <div class="gate-info-label"><i class="fa-solid fa-flask"></i> How It Works</div>
           <h2 class="gate-info-title">The Methodology</h2>
-          <p class="gate-info-body">Scores reflect how consistently a model supports — or undermines — human flourishing across 260+ realistic, multi-turn scenarios. Each conversation is simulated with a demographically varied user pursuing a latent goal, then graded by LLM-as-judge systems validated against expert human raters.</p>
+          <p class="gate-info-body">Scores reflect how consistently a model supports, or undermines, human flourishing across 260+ realistic, multi-turn scenarios. Each conversation is simulated with a demographically varied user pursuing a latent goal, then graded by LLM-as-judge systems validated against expert human raters.</p>
           <ul class="gate-info-points">
-            <li><strong>+1</strong> — behavior reliably <span style="color:#16a34a;font-weight:700">promotes</span> human flourishing</li>
-            <li><strong>0</strong> — behavior is <span style="color:#6b7280;font-weight:700">neutral</span> or inconsistent</li>
-            <li><strong>−1</strong> — behavior reliably <span style="color:#dc2626;font-weight:700">harms</span> human flourishing</li>
+            <li><strong>+1</strong>, behavior reliably <span style="color:#16a34a;font-weight:700">promotes</span> human flourishing</li>
+            <li><strong>0</strong>, behavior is <span style="color:#6b7280;font-weight:700">neutral</span> or inconsistent</li>
+            <li><strong>−1</strong>, behavior reliably <span style="color:#dc2626;font-weight:700">harms</span> human flourishing</li>
             <li>Every metric is tested across age groups, gender profiles, and audience contexts to surface where harms concentrate</li>
             <li>Scenarios unfold over multiple turns to capture relational, time-extended dynamics that single-prompt benchmarks miss</li>
             <li>Framework grounded in the Harvard Human Flourishing Program, eudaimonic psychology, and 80+ expert workshops with clinicians, ethicists, educators, and affected communities</li>
@@ -174,7 +172,7 @@
             <div class="gate-support-card"><i class="fa-solid fa-bullhorn"></i><strong>Advocacy</strong><span>Spread the word and champion human-centered AI evaluation</span></div>
             <div class="gate-support-card"><i class="fa-solid fa-microscope"></i><strong>Research Collab</strong><span>Co-develop benchmarks or contribute datasets</span></div>
             <div class="gate-support-card"><i class="fa-solid fa-circle-dollar-to-slot"></i><strong>Financial Support</strong><span>Philanthropic funding keeps the benchmark open</span></div>
-            <div class="gate-support-card"><i class="fa-solid fa-puzzle-piece"></i><strong>Other</strong><span>Media, policy, infrastructure — all forms welcome</span></div>
+            <div class="gate-support-card"><i class="fa-solid fa-puzzle-piece"></i><strong>Other</strong><span>Media, policy, infrastructure, all forms welcome</span></div>
           </div>
           <div class="form-card gate-form-card" id="gate-support-card">
             <form class="bench-form" id="gate-support-form" novalidate>
@@ -220,7 +218,7 @@
         <!-- Feedback panel -->
         <div class="gate-tab-panel" id="gate-panel-feedback" role="tabpanel" aria-labelledby="gate-tab-feedback" hidden>
           <h2 class="gate-section-title">Feedback</h2>
-          <p class="gate-section-desc">Help us improve the benchmark — no access code required.</p>
+          <p class="gate-section-desc">Help us improve the benchmark, no access code required.</p>
           <div class="form-card gate-form-card" id="gate-feedback-card">
             <form class="bench-form" id="gate-feedback-form" novalidate>
               <div class="form-group">
@@ -273,7 +271,7 @@
     <footer class="gate-footer">
       <span>© 2026 MIT Media Lab · AHA Research Program</span>
       <span>·</span>
-      <span>Human Impact Bench</span>
+      <span>Human-AI Impact Bench</span>
     </footer>
 
   </div>
@@ -425,7 +423,7 @@
         });
       }
 
-      // ===== Full Sunburst — always init on DOMContentLoaded regardless of auth =====
+      // ===== Full Sunburst, always init on DOMContentLoaded regardless of auth =====
       // Guarded so it only runs once even if called multiple times
       var _sbDone = false;
       function _runGateSunburst() {
@@ -483,6 +481,29 @@
               var areas = taxonomy.areas;
               var areaSpan = (2*Math.PI) / areas.length;
 
+              // ===== Inline descriptions (mirrors src/descriptions.ts) =====
+              var AREA_DESC = {
+                'self-actualization': 'How AI shapes societal outcomes — creativity, autonomy, meaning, and collective human potential.',
+                'psychological': 'How AI shapes your mental health, emotional well-being, and interpersonal relationships.',
+                'physical-safety': 'How AI influences your physical health, safety, security, and basic needs.'
+              };
+              var SUBAREA_DESC = {
+                'meaning-purpose': 'Whether AI helps or hinders your sense of purpose, direction, and meaningful engagement.',
+                'autonomy': 'Whether AI supports or undermines your ability to make independent decisions and self-govern.',
+                'learning-growth': 'Whether AI accelerates or stunts your skill development and intellectual growth.',
+                'learning': 'Whether AI accelerates or stunts your skill development and intellectual growth.',
+                'life-satisfaction': 'Whether AI contributes to or detracts from your overall happiness and life fulfillment.',
+                'mental-health': 'Whether AI improves or worsens anxiety, depression, stress, and psychological resilience.',
+                'creativity': 'Whether AI augments or replaces human creative expression and imagination.',
+                'social-relationships': 'Whether AI strengthens or weakens your connections with other people.',
+                'character-virtue': 'Whether AI cultivates or erodes ethical behavior, empathy, and moral character.',
+                'food-nutrition': 'Whether AI helps or hinders access to healthy food and good nutritional habits.',
+                'sleep-quality': 'Whether AI improves or disrupts healthy sleep patterns and rest.',
+                'shelter-housing': 'Whether AI expands or limits access to safe, stable housing.',
+                'physical-health': 'Whether AI improves or degrades physical fitness, medical care, and bodily health.',
+                'financial-security': 'Whether AI increases or decreases economic stability and financial well-being.'
+              };
+
               // Pre-compute per-segment scores for each model
               var modelScoreMaps = {};
               MODELS.forEach(function(mid) {
@@ -515,16 +536,18 @@
 
                 var aPath = mk('path', { d: arcPath(R1I,R1O,a0,a1), fill: scoreToColor(0) });
                 aPath.style.transition = 'fill 1.2s ease';
+                aPath.style.cursor = 'pointer';
                 arcsG.appendChild(aPath);
-                allSegs.push({ el: aPath, id: area.id });
+                allSegs.push({ el: aPath, id: area.id, type: 'area', data: area });
 
                 var nSubs = area.subareas.length, subSpan = areaSpan/nSubs;
                 area.subareas.forEach(function(sub, si) {
                   var s0 = a0+si*subSpan, s1 = s0+subSpan;
                   var sPath = mk('path', { d: arcPath(R2I,R2O,s0,s1), fill: scoreToColor(0) });
                   sPath.style.transition = 'fill 1.2s ease';
+                  sPath.style.cursor = 'pointer';
                   arcsG.appendChild(sPath);
-                  allSegs.push({ el: sPath, id: sub.id });
+                  allSegs.push({ el: sPath, id: sub.id, type: 'subarea', data: sub, areaName: area.name });
                 });
               });
 
@@ -585,10 +608,80 @@
 
               var idx = 0;
               applyModel(MODELS[idx]);
-              setInterval(function() {
+              var cycleTimer = setInterval(function() {
                 idx = (idx + 1) % MODELS.length;
                 applyModel(MODELS[idx]);
               }, CYCLE_MS);
+
+              // ===== Hover tooltip =====
+              var tip = document.createElement('div');
+              tip.className = 'gate-sb-tip';
+              tip.setAttribute('role', 'tooltip');
+              container.appendChild(tip);
+
+              function escapeHtml(s) {
+                return String(s).replace(/[&<>"']/g, function(c) {
+                  return { '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;' }[c];
+                });
+              }
+
+              function buildTipHtml(seg) {
+                if (seg.type === 'area') {
+                  var area = seg.data;
+                  var desc = AREA_DESC[area.id] || '';
+                  var examples = (area.subareas || []).slice(0, 4).map(function(s) {
+                    return '<span class="gate-sb-tip-chip">' + escapeHtml(s.name) + '</span>';
+                  }).join('');
+                  return '<div class="gate-sb-tip-kicker">Well-being area</div>'
+                    + '<div class="gate-sb-tip-title">' + escapeHtml(area.name) + '</div>'
+                    + (desc ? '<div class="gate-sb-tip-desc">' + escapeHtml(desc) + '</div>' : '')
+                    + (examples ? '<div class="gate-sb-tip-label">Includes</div><div class="gate-sb-tip-chips">' + examples + '</div>' : '');
+                }
+                // subarea
+                var sub = seg.data;
+                var sdesc = SUBAREA_DESC[sub.id] || '';
+                var pos = (sub.behaviors || []).filter(function(b){ return b.valence === 'positive'; });
+                var neg = (sub.behaviors || []).filter(function(b){ return b.valence === 'negative'; });
+                var posEx = pos[0] ? '<div class="gate-sb-tip-ex pos"><i class="fa-solid fa-arrow-up"></i> ' + escapeHtml(pos[0].name) + '</div>' : '';
+                var negEx = neg[0] ? '<div class="gate-sb-tip-ex neg"><i class="fa-solid fa-arrow-down"></i> ' + escapeHtml(neg[0].name) + '</div>' : '';
+                return '<div class="gate-sb-tip-kicker">' + escapeHtml(seg.areaName || '') + '</div>'
+                  + '<div class="gate-sb-tip-title">' + escapeHtml(sub.name) + '</div>'
+                  + (sdesc ? '<div class="gate-sb-tip-desc">' + escapeHtml(sdesc) + '</div>' : '')
+                  + (posEx || negEx ? posEx + negEx : '');
+              }
+
+              function positionTip(ev) {
+                var crect = container.getBoundingClientRect();
+                var x = ev.clientX - crect.left + 14;
+                var y = ev.clientY - crect.top + 14;
+                var tw = tip.offsetWidth, th = tip.offsetHeight;
+                if (x + tw + 12 > crect.width) x = ev.clientX - crect.left - tw - 14;
+                if (y + th + 12 > crect.height) y = ev.clientY - crect.top - th - 14;
+                if (x < 0) x = 8;
+                if (y < 0) y = 8;
+                tip.style.transform = 'translate(' + x + 'px,' + y + 'px)';
+              }
+
+              allSegs.forEach(function(seg) {
+                seg.el.addEventListener('mouseenter', function(ev) {
+                  tip.innerHTML = buildTipHtml(seg);
+                  tip.classList.add('visible');
+                  // Dim non-hovered segments
+                  allSegs.forEach(function(s) {
+                    s.el.style.opacity = (s === seg) ? '1' : '0.35';
+                  });
+                  seg.el.style.filter = 'brightness(1.08)';
+                  positionTip(ev);
+                });
+                seg.el.addEventListener('mousemove', positionTip);
+                seg.el.addEventListener('mouseleave', function() {
+                  tip.classList.remove('visible');
+                  allSegs.forEach(function(s) {
+                    s.el.style.opacity = '';
+                    s.el.style.filter = '';
+                  });
+                });
+              });
             });
           })();
       }
@@ -757,7 +850,7 @@
         <div class="modal-tag"><i class="fa-solid fa-wand-magic-sparkles"></i> Smart Explore</div>
         <h2 id="smart-explore-title" class="modal-title">Personalize your exploration to your context</h2>
         <p class="modal-subtitle">
-          Tell us about yourself, your AI use cases, and your concerns — we'll surface the most relevant findings.
+          Tell us about yourself, your AI use cases, and your concerns, we'll surface the most relevant findings.
         </p>
       </div>
       <form class="modal-form" id="smart-explore-form">
@@ -884,6 +977,9 @@
       <button class="about-subtab" data-subtab="methodology">
         <i class="fa-solid fa-flask"></i> Methodology
       </button>
+      <button class="about-subtab" data-subtab="team">
+        <i class="fa-solid fa-people-group"></i> Team
+      </button>
       <button class="about-subtab" data-subtab="summary">
         <i class="fa-solid fa-file-lines"></i> Summary
       </button>
@@ -894,9 +990,21 @@
   <div id="section-about" class="tab-section" hidden>
     <div class="tab-section-inner">
 
+      <section class="whitepaper-banner">
+        <div class="whitepaper-banner-text">
+          <h1 class="whitepaper-title">The Human–AI Impact Bench</h1>
+          <p class="whitepaper-subtitle">Benchmarking AI models for human flourishing</p>
+          <a class="whitepaper-cta" href="#" target="_blank" rel="noopener noreferrer">
+            Read white paper
+          </a>
+        </div>
+        <a class="whitepaper-thumb" href="#" target="_blank" rel="noopener noreferrer" aria-label="White paper">
+          <img src="/images/Screenshot%202026-04-26%20at%2010.56.40%E2%80%AFPM.png" alt="White paper preview" />
+        </a>
+      </section>
+
       <div class="section-hero">
-        <div class="section-hero-tag"><i class="fa-solid fa-hand-holding-seedling"></i> Open Benchmark on Human Impact of AI</div>
-        <h1 class="section-hero-title">Does AI Make Humans Flourish?</h1>
+        <h1 class="section-hero-title">About the Project</h1>
         <p class="section-hero-subtitle">
           Today's AI systems are evaluated on technical performance alone. No widely adopted framework measures whether AI actually benefits the people who use it. We're building the first open benchmark that does.
         </p>
@@ -906,20 +1014,20 @@
         <div class="section-card section-card-highlight">
           <div class="section-card-icon"><i class="fa-solid fa-triangle-exclamation"></i></div>
           <h3>The Challenge</h3>
-          <p>Current AI benchmarks measure accuracy, speed, and task completion — but reveal nothing about what happens to the human on the other side of the screen. They don't tell us whether an AI helps a student learn or merely completes the work for them, whether it supports emotional health or fosters unhealthy dependence, or whether it enriches creativity or flattens it.</p>
+          <p>As AI is increasingly present in our daily lives, in how we choose to work and relate to one another, there has been no better time to evaluate AI's impact on our lives as a whole. Even top-performing AI models produce harmful outcomes in over 70% of high-risk scenarios. Real harms build up across long, multi-turn conversations, not single prompts. And while researchers have started consolidating AI benchmarks, none of them measure human flourishing.</p>
         </div>
         <div class="section-card">
           <div class="section-card-icon"><i class="fa-solid fa-flask"></i></div>
           <h3>Our Approach</h3>
-          <p>The <strong>Advancing Humans with AI (AHA)</strong> research program at the MIT Media Lab — in collaboration with the Psychology of Technology Institute, USC, and UC Berkeley — is building the world's first open benchmark suite that evaluates AI systems on their impact on human flourishing.</p>
+          <p>We are researchers from <strong>MIT Media Lab</strong>, <strong>USC</strong>, and <strong>UC Berkeley</strong> collaborating to evaluate the impact of AI across the physical, societal, and psychological domains of our lives. Each metric is tested through multi-turn simulations with realistic, demographically varied users, and validated by domain experts on our team.</p>
         </div>
       </div>
 
       <div class="section-divider"></div>
 
       <h2 class="section-heading"><i class="fa-solid fa-network-wired"></i> Origins &amp; Collaborators</h2>
-      <p class="section-body">Our work builds on a workshop organized at MIT with support from the Omidyar Network. In October 2025, we convened <strong>80 interdisciplinary experts from over 40 institutions</strong> to address this gap. Through intensive collaboration, participants developed novel evaluation frameworks for assessing AI's impact on human flourishing across three core dimensions.</p>
-      <p class="section-body" style="margin-top:10px">This effort produced a framework for benchmarking the human impact of AI and a community-driven initiative to design human-centered AI benchmarks, including <strong>PsychoRisk Bench</strong> (our MIT effort), <strong>Humane Bench</strong>, and more.</p>
+      <p class="section-body">This work began at an <a class="section-inline-link" href="https://www.media.mit.edu/events/aha-flourishing-workshop/" target="_blank" rel="noopener noreferrer">AHA Flourishing Workshop</a> held at MIT in October 2025 with support from the Omidyar Network, where we convened <strong>80 interdisciplinary experts from over 40 institutions</strong> to address this gap. Through intensive collaboration, participants developed novel evaluation frameworks for assessing AI's impact on human flourishing across three core dimensions.</p>
+      <p class="section-body" style="margin-top:10px">The workshop produced a <a class="section-inline-link" href="https://www.media.mit.edu/projects/report-benchmarks-for-human-flourishing-with-ai/overview/" target="_blank" rel="noopener noreferrer">report on benchmarks for human flourishing with AI</a> and a community-driven initiative to design human-centered AI benchmarks, including <strong>PsychoRisk Bench</strong> (our MIT effort), <strong>Humane Bench</strong>, and more.</p>
 
       <div class="section-collab-list">
         <div class="section-collab-item"><i class="fa-solid fa-university"></i> MIT Media Lab</div>
@@ -953,7 +1061,7 @@
           <div class="section-deliverable-num">03</div>
           <div class="section-deliverable-body">
             <h4>Open Submission &amp; Community Participation</h4>
-            <p>Any benchmark relating to human psychological well-being or flourishing is eligible for inclusion — whether it addresses positive outcomes such as autonomy and competence, or negative outcomes such as codependence and psychological distress.</p>
+            <p>Any benchmark relating to human psychological well-being or flourishing is eligible for inclusion, whether it addresses positive outcomes such as autonomy and competence, or negative outcomes such as codependence and psychological distress.</p>
             <p style="margin-top:8px">Submissions follow a standardized structure covering benchmark justification, scenario details, and scoring criteria. The project is designed as a living resource, welcoming contributions from interdisciplinary experts worldwide.</p>
           </div>
         </div>
@@ -965,7 +1073,7 @@
         <i class="fa-solid fa-calendar-star"></i>
         <div>
           <strong>Public Launch: April 28, 2026</strong>
-          <p>The initiative is seeking philanthropic support to execute a public launch. AHA's research has already shaped policy — the team's findings on AI companion chatbots were cited as key inspiration in <strong>California Senate Bill 243</strong>, protecting children from harmful AI relationships.</p>
+          <p>The initiative is seeking philanthropic support to execute a public launch. AHA's research has already shaped policy, the team's findings on AI companion chatbots were cited as key inspiration in <strong>California Senate Bill 243</strong>, protecting children from harmful AI relationships.</p>
         </div>
       </div>
 
@@ -1039,14 +1147,14 @@
           <i class="fa-solid fa-circle-check"></i>
           <div>
             <strong>Construct Fidelity</strong>
-            <p>Simulated inputs are consistently representative of the construct of interest — verified by human experts and LLM judges.</p>
+            <p>Simulated inputs are consistently representative of the construct of interest, verified by human experts and LLM judges.</p>
           </div>
         </div>
         <div class="section-criterion">
           <i class="fa-solid fa-circle-check"></i>
           <div>
             <strong>Broad Coverage</strong>
-            <p>Inputs capture a broad, complete set of scenarios — measured through semantic diversity analysis.</p>
+            <p>Inputs capture a broad, complete set of scenarios, measured through semantic diversity analysis.</p>
           </div>
         </div>
         <div class="section-criterion">
@@ -1060,7 +1168,7 @@
           <i class="fa-solid fa-circle-check"></i>
           <div>
             <strong>Model Sensitivity</strong>
-            <p>Benchmark differentiates between better and worse models — later models should score higher than earlier ones.</p>
+            <p>Benchmark differentiates between better and worse models, later models should score higher than earlier ones.</p>
           </div>
         </div>
         <div class="section-criterion">
@@ -1170,6 +1278,82 @@
     </div>
   </div>
 
+  <!-- ===== TEAM SECTION ===== -->
+  <div id="section-team" class="tab-section" hidden>
+    <div class="tab-section-inner">
+
+      <div class="section-hero">
+        <h1 class="section-hero-title">Team &amp; Collaborators</h1>
+        <p class="section-hero-subtitle">
+          This ambitious project could not have been done without collaboration across many disciplines and areas of expertise. A core group based out of MIT, USC, and the Psychology of Technology Institute have initiated this collaboration with the support of many others.
+        </p>
+      </div>
+
+      <section class="team-partners">
+        <p class="team-partners-title">Led by researchers at</p>
+        <div class="team-partners-row">
+          <img src="/images/MIT Logo.png" alt="MIT" class="team-partner-logo" />
+          <img src="/images/ML logo.png" alt="MIT Media Lab" class="team-partner-logo" />
+          <img src="/images/USC-Logo.png" alt="USC" class="team-partner-logo" />
+          <img src="/images/PTI+Logo+updated.webp" alt="Psychology of Technology Institute" class="team-partner-logo" />
+          <img src="/images/UC-Berkeley-Haas-logo-digital_stacked-blue.png" alt="UC Berkeley Haas" class="team-partner-logo" />
+        </div>
+      </section>
+
+      <div class="section-divider"></div>
+
+      <h2 class="section-heading"><i class="fa-solid fa-users"></i> Team</h2>
+      <ul class="team-list">
+        <li><strong>Pat Pataranutaporn</strong>, MIT Media Lab</li>
+        <li><strong>Pattie Maes</strong>, MIT Media Lab</li>
+        <li><strong>Jennifer Pfister</strong>, MIT Media Lab</li>
+        <li><strong>Chayapatr Archiwaranguprok</strong>, MIT Media Lab</li>
+        <li><strong>Constanze Albrecht</strong>, MIT Media Lab</li>
+        <li><strong>Sheer Karny</strong>, MIT Media Lab</li>
+        <li><strong>Rachel Poonsiriwong</strong>, MIT Media Lab</li>
+        <li><strong>Ravi Iyer</strong>, USC Marshall School's Neely Center &amp; Psychology of Technology Institute</li>
+        <li><strong>Nate Fast</strong>, USC Marshall School's Neely Center &amp; Psychology of Technology Institute</li>
+        <li><strong>Juliana Schroeder</strong>, University of California, Berkeley &amp; Psychology of Technology Institute</li>
+        <li><strong>Stanley Huang</strong>, Boston University</li>
+        <li><strong>Yuning Liu</strong>, Harvard University</li>
+      </ul>
+
+      <div class="section-divider"></div>
+
+      <h2 class="section-heading"><i class="fa-solid fa-handshake"></i> Support in helping define and launch project</h2>
+      <ul class="team-list">
+        <li>Noesis Collaborative</li>
+        <li>Building Humane Technology</li>
+      </ul>
+
+      <div class="section-divider"></div>
+
+      <h2 class="section-heading"><i class="fa-solid fa-flask-vial"></i> Support in contributing benchmarks and benchmark expertise</h2>
+      <ul class="team-list">
+        <li><strong>Jenny Radesky, MD</strong>, University of Michigan</li>
+        <li><strong>Alexis Hiniker</strong>, University of Washington</li>
+        <li><strong>Marie Bragg</strong>, New York University</li>
+        <li><strong>Yaoli Mao &amp; Erika Anderson</strong>, Humane Bench</li>
+        <li><strong>Eric Ngoiya</strong>, QueueLab</li>
+        <li><strong>Carl Vincent Kho</strong>, Minerva University</li>
+        <li><strong>Su Jin Park</strong></li>
+        <li><strong>Anil Kshatriya</strong>, ESSEC Business School</li>
+        <li>Generative AI for Good</li>
+        <li>AI Culture Lab</li>
+        <li><strong>Eduardo Baena</strong>, Northeastern University</li>
+        <li><strong>Ryan McBain, Jonathan Cantor, Ellice Huang</strong>, Rand Corporation</li>
+        <li><strong>Cornelia Walther</strong>, University of Pennsylvania</li>
+        <li>Spring Health</li>
+        <li>Tech Justice Law</li>
+      </ul>
+
+      <p class="section-body" style="margin-top:24px">
+        Participants of the MIT Workshop for Designing Benchmarks for Human Flourishing with AI supported by Omidyar Network.
+      </p>
+
+    </div>
+  </div>
+
   <!-- ===== SUMMARY SECTION ===== -->
   <div id="section-summary" class="tab-section" hidden>
     <div class="tab-section-inner">
@@ -1178,13 +1362,13 @@
         <div class="section-hero-tag"><i class="fa-solid fa-file-lines"></i> Framework Overview</div>
         <h1 class="section-hero-title">Mapping AI Impact to Human Flourishing</h1>
         <p class="section-hero-subtitle">
-          Rather than defining yet another taxonomy, this benchmark allows anyone to define a construct that relates to human flourishing — and places those constructs within a unified, evidence-based framework.
+          Rather than defining yet another taxonomy, this benchmark allows anyone to define a construct that relates to human flourishing, and places those constructs within a unified, evidence-based framework.
         </p>
       </div>
 
       <h2 class="section-heading"><i class="fa-solid fa-layer-group"></i> A Hierarchy of Human Needs</h2>
       <p class="section-body">Many dimensions of flourishing map naturally onto Maslow's hierarchy of human needs. A flourishing society supports users' <strong>physical needs</strong> (health, safety from harm), which enables people to pursue <strong>social and relational needs</strong> (belonging, meaningful relationships), which in turn creates space for <strong>psychological needs</strong> (autonomy, competence, relatedness), ultimately leading to <strong>self-actualization</strong> (purpose, meaning, moral values).</p>
-      <p class="section-body" style="margin-top:10px">LLM benchmarks exist at every level of this hierarchy — and this framework lets us ensure comprehensive coverage across all levels.</p>
+      <p class="section-body" style="margin-top:10px">LLM benchmarks exist at every level of this hierarchy, and this framework lets us ensure comprehensive coverage across all levels.</p>
 
       <div class="section-hierarchy">
         <div class="section-hierarchy-level h-self">
@@ -1215,12 +1399,12 @@
         <div class="section-dimension-card positive-card">
           <div class="section-dimension-icon"><i class="fa-solid fa-circle-plus"></i></div>
           <h4>Positive Outcomes</h4>
-          <p>AI actively enhances valued aspects of human flourishing — supporting creativity, strengthening relationships, fostering autonomy, building competence, enriching meaning.</p>
+          <p>AI actively enhances valued aspects of human flourishing, supporting creativity, strengthening relationships, fostering autonomy, building competence, enriching meaning.</p>
         </div>
         <div class="section-dimension-card negative-card">
           <div class="section-dimension-icon"><i class="fa-solid fa-circle-minus"></i></div>
           <h4>Harm Prevention</h4>
-          <p>AI prevents or mitigates harmful outcomes — avoiding dependency, protecting dignity, respecting attention, reducing anxiety, preventing exploitation or manipulation.</p>
+          <p>AI prevents or mitigates harmful outcomes, avoiding dependency, protecting dignity, respecting attention, reducing anxiety, preventing exploitation or manipulation.</p>
         </div>
       </div>
 
@@ -1232,11 +1416,11 @@
       <div class="section-viz-guide">
         <div class="section-viz-ring">
           <div class="section-viz-ring-dot" style="background: var(--accent)"></div>
-          <div><strong>Inner Ring</strong> — Three core well-being areas: Societal, Psychological, Physical</div>
+          <div><strong>Inner Ring</strong>, Three core well-being areas: Societal, Psychological, Physical</div>
         </div>
         <div class="section-viz-ring">
           <div class="section-viz-ring-dot" style="background: #00b3b099"></div>
-          <div><strong>Outer Ring</strong> — 13 subareas (e.g. Mental Health, Creativity, Autonomy, Sleep, Financial Security)</div>
+          <div><strong>Outer Ring</strong>, 13 subareas (e.g. Mental Health, Creativity, Autonomy, Sleep, Financial Security)</div>
         </div>
       </div>
 
@@ -1245,15 +1429,15 @@
       <div class="section-color-guide">
         <div class="section-color-item">
           <div class="section-color-swatch" style="background: #dc2626"></div>
-          <div><strong>Red</strong> — AI behavior consistently harms this dimension of human flourishing. Scores approach −1.</div>
+          <div><strong>Red</strong>, AI behavior consistently harms this dimension of human flourishing. Scores approach −1.</div>
         </div>
         <div class="section-color-item">
           <div class="section-color-swatch" style="background: #e5e7eb"></div>
-          <div><strong>Grey/Neutral</strong> — AI has no measurable net effect on this dimension. Score near 0.</div>
+          <div><strong>Grey/Neutral</strong>, AI has no measurable net effect on this dimension. Score near 0.</div>
         </div>
         <div class="section-color-item">
           <div class="section-color-swatch" style="background: #16a34a"></div>
-          <div><strong>Green</strong> — AI behavior actively promotes this dimension of human flourishing. Scores approach +1.</div>
+          <div><strong>Green</strong>, AI behavior actively promotes this dimension of human flourishing. Scores approach +1.</div>
         </div>
       </div>
 
@@ -1309,7 +1493,7 @@
             <input type="hidden" id="fb-rating" value="">
           </div>
           <div class="form-group">
-            <label class="form-label" for="fb-email">Email <span class="form-hint">(optional — if you'd like a reply)</span></label>
+            <label class="form-label" for="fb-email">Email <span class="form-hint">(optional, if you'd like a reply)</span></label>
             <input class="form-input" type="email" id="fb-email" placeholder="you@example.com" />
           </div>
           <button type="submit" class="form-submit-btn">
@@ -1414,7 +1598,7 @@
         <div class="support-way-card">
           <div class="support-way-icon"><i class="fa-solid fa-puzzle-piece"></i></div>
           <h4>Other</h4>
-          <p>Media coverage, policy connections, technical infrastructure, community building — we welcome all forms of support.</p>
+          <p>Media coverage, policy connections, technical infrastructure, community building, we welcome all forms of support.</p>
         </div>
       </div>
 
@@ -1512,7 +1696,7 @@
         <input type="password" id="explore-gate-input" class="explore-gate-input" placeholder="Password" autocomplete="off" />
         <button type="submit" class="explore-gate-submit">Unlock</button>
       </form>
-      <div class="explore-gate-error" id="explore-gate-error" hidden>Incorrect password — please try again.</div>
+      <div class="explore-gate-error" id="explore-gate-error" hidden>Incorrect password, please try again.</div>
       <button type="button" class="explore-gate-request" id="explore-gate-request">
         Don't have a password? <span>Request access →</span>
       </button>
@@ -1528,7 +1712,7 @@
       var mainContent = document.querySelector('.main-content');
       var aboutPage = document.getElementById('about-page');
 
-      var aboutSubsections = ['about', 'methodology', 'summary', 'feedback', 'request-access', 'support'];
+      var aboutSubsections = ['about', 'methodology', 'team', 'summary', 'feedback', 'request-access', 'support'];
 
       function showAboutSubsection(name) {
         aboutSubsections.forEach(function (s) {
@@ -1568,7 +1752,7 @@
               if (window._showExploreGate) window._showExploreGate();
               return;
             }
-            // About (and other tabs) allowed without auth — hide gate
+            // About (and other tabs) allowed without auth, hide gate
             if (window._hideGate) window._hideGate();
           }
 
@@ -1583,6 +1767,12 @@
           if (mainContent) mainContent.style.display = isExplore ? '' : 'none';
 
           if (aboutPage) aboutPage.hidden = isExplore;
+          // Toggle about-mode for transparent scroll-aware nav
+          if (isExplore) {
+            document.body.classList.remove('about-mode');
+          } else {
+            document.body.classList.add('about-mode');
+          }
           if (!isExplore) {
             // Map nav tab → about subtab
             var subtabName = aboutSubtabMap[targetTab] || 'about';
@@ -1672,6 +1862,35 @@
             if (homeTab) homeTab.click();
           });
         }
+      })();
+
+      // ===== About-mode scroll-aware nav =====
+      (function _wireAboutScrollNav() {
+        var bar = document.getElementById('control-bar');
+        if (!bar) return;
+        var update = function () {
+          if (!document.body.classList.contains('about-mode')) {
+            bar.classList.remove('is-scrolled');
+            return;
+          }
+          var content = document.querySelector('.about-content');
+          var section = document.querySelector('#about-page .tab-section:not([hidden])');
+          var sy = (section && section.scrollTop) || (content && content.scrollTop) || window.scrollY || 0;
+          if (sy > 8) bar.classList.add('is-scrolled');
+          else bar.classList.remove('is-scrolled');
+        };
+        window.addEventListener('scroll', update, { passive: true });
+        document.addEventListener('scroll', function (e) {
+          var t = e.target;
+          if (t && t.classList && (t.classList.contains('tab-section') || t.classList.contains('about-content'))) {
+            update();
+          }
+        }, true);
+        // Also re-run on tab clicks
+        document.querySelectorAll('.nav-tab, .about-subtab').forEach(function (b) {
+          b.addEventListener('click', function () { setTimeout(update, 30); });
+        });
+        update();
       })();
 
       // ===== Form interactions =====
@@ -1995,7 +2214,7 @@
       }
 
       function applySunburstFocus() {
-        // Only subareas (middle ring) get focus — not the umbrella areas
+        // Only subareas (middle ring) get focus, not the umbrella areas
         var focusIds = new Set();
         FOCUS_CONSTRUCTS.forEach(function (c) {
           c.subareas.forEach(function (id) { focusIds.add(id); });

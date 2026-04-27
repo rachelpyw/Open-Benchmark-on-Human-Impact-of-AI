@@ -947,7 +947,7 @@ function _renderSubarea(panel: HTMLElement, subareaId: string): void {
               <div class="summary-bar-track">
                 <div class="summary-bar-fill negative-fill" style="width:${Math.round((1 - negAvg) * 100)}%"></div>
               </div>
-              <div class="summary-bar-score negative-score">${Math.round((1 - negAvg) * 100)}</div>
+              <div class="summary-bar-score negative-score">${(1 - negAvg).toFixed(2)}</div>
             </div>`
                 : ""
             }

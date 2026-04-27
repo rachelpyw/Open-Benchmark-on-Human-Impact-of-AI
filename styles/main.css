@@ -1997,8 +1997,8 @@ body.modal-open {
   text-align: center;
 }
 .gate-hero--centered .gate-hero-title {
-  font-size: clamp(2rem, 3.6vw, 2.8rem);
-  margin: 0 auto 22px;
+  font-size: clamp(2.6rem, 4.6vw, 3.6rem);
+  margin: 28px auto;
   text-align: center;
 }
 .gate-hero-desc--centered {
@@ -2008,11 +2008,12 @@ body.modal-open {
   max-width: 780px;
   font-size: 15px;
   color: #4b5563;
-  line-height: 1.5;
+  line-height: 1.47;
   text-align: center;
 }
 .gate-ctas--centered {
   justify-content: center;
+  margin-top: -8px;
 }
 .gate-pw-row--centered {
   margin: 12px auto 0;
@@ -2020,7 +2021,7 @@ body.modal-open {
 
 /* Rotating subtitle with typing animation */
 .gate-hero-rotator {
-  font-size: clamp(1.05rem, 1.8vw, 1.3rem);
+  font-size: clamp(0.925rem, 1.5vw, 1.125rem);
   font-weight: 500;
   color: #374151;
   margin: 0 auto 6px;
@@ -2060,7 +2061,7 @@ body.modal-open {
 /* Hero visual block (sunburst on a clean white circular card hugging the wheel) */
 .gate-hero-visual {
   position: relative;
-  margin: -28px auto 0;
+  margin: -36px auto 0;
   width: min(880px, 92vh);
   aspect-ratio: 1 / 1;
   display: flex;
@@ -2115,12 +2116,13 @@ body.modal-open {
 }
 
 .gate-hero-title {
-  font-size: clamp(2.4rem, 5vw, 3.4rem);
-  font-weight: 800;
-  line-height: 1.05;
+  font-family: "Source Serif Pro", "Cormorant Garamond", "Iowan Old Style", Georgia, "Times New Roman", serif;
+  font-size: clamp(3.4rem, 6.4vw, 4.8rem);
+  font-weight: 550;
+  line-height: 1.04;
   color: #111827;
   margin: 0 0 20px;
-  letter-spacing: -0.03em;
+  letter-spacing: -0.015em;
 }
 
 .gate-hero-title em {
@@ -2132,11 +2134,11 @@ body.modal-open {
 }
 
 .gate-hero-tagline {
-  font-size: 18px;
-  font-weight: 600;
+  font-size: 14px;
+  font-weight: 500;
   color: #374151;
   margin: 0 0 16px;
-  line-height: 1.45;
+  line-height: 1.5;
 }
 
 .gate-hero-tagline em {
@@ -2398,11 +2400,12 @@ body.modal-open {
 }
 
 .gate-section-title {
-  font-size: 2rem;
-  font-weight: 800;
+  font-family: "Source Serif Pro", "Cormorant Garamond", "Iowan Old Style", Georgia, "Times New Roman", serif;
+  font-size: 2.1rem;
+  font-weight: 550;
   color: #111827;
-  margin: 0 0 10px;
-  letter-spacing: -0.02em;
+  margin: 24px 0 10px;
+  letter-spacing: -0.012em;
 }
 
 .gate-section-desc {
@@ -2516,6 +2519,7 @@ body.gate-mode #app-gate {
 }
 
 body.gate-mode #smart-explore-btn { display: none !important; }
+body.about-mode #smart-explore-btn { display: none !important; }
 
 /* ===== Gate forms: tabs ===== */
 .gate-tabs-section {
@@ -2614,10 +2618,11 @@ body.gate-mode #smart-explore-overlay {
 }
 
 .gate-info-title {
-  font-size: 1.5rem;
-  font-weight: 800;
+  font-family: "Source Serif Pro", "Cormorant Garamond", "Iowan Old Style", Georgia, "Times New Roman", serif;
+  font-size: 1.75rem;
+  font-weight: 550;
   color: #111827;
-  letter-spacing: -0.02em;
+  letter-spacing: -0.012em;
   margin: 0;
 }
 
@@ -2667,7 +2672,13 @@ body.gate-mode #smart-explore-overlay {
   flex: 1;
   min-height: 0;
   width: 100%;
+  max-width: 1180px;
+  margin: 0 auto;
+  padding: 24px 32px;
+  gap: 24px;
   background: var(--bg);
+  align-items: flex-start;
+  justify-content: center;
 }
 
 .about-page[hidden] {
@@ -2676,17 +2687,20 @@ body.gate-mode #smart-explore-overlay {
 
 .about-sidebar {
   flex: 0 0 220px;
-  border-right: 1px solid var(--border-light);
   background: var(--surface);
-  padding: 28px 14px;
+  border: 1px solid var(--border-light);
+  border-radius: 16px;
+  box-shadow: var(--shadow-sm);
+  padding: 12px;
+  margin-top: 48px;
   display: flex;
   flex-direction: column;
   gap: 4px;
   position: sticky;
-  top: 0;
-  align-self: flex-start;
-  max-height: 100vh;
+  top: 96px;
+  max-height: calc(100vh - 120px);
   overflow-y: auto;
+  z-index: 10;
 }
 
 .about-subtab {
@@ -2725,9 +2739,9 @@ body.gate-mode #smart-explore-overlay {
 }
 
 .about-content {
-  flex: 1;
+  flex: 1 1 860px;
   min-width: 0;
-  overflow-y: auto;
+  max-width: 860px;
 }
 
 .about-content .tab-section {
@@ -3092,10 +3106,11 @@ body.gate-mode #smart-explore-overlay {
 }
 
 .section-hero-title {
-  font-size: 36px;
-  font-weight: 800;
+  font-family: "Source Serif Pro", "Cormorant Garamond", "Iowan Old Style", Georgia, "Times New Roman", serif;
+  font-size: 42px;
+  font-weight: 550;
   color: var(--text-primary);
-  letter-spacing: -0.03em;
+  letter-spacing: -0.018em;
   line-height: 1.15;
   margin-bottom: 14px;
 }
@@ -3109,10 +3124,11 @@ body.gate-mode #smart-explore-overlay {
 
 /* Section Heading */
 .section-heading {
-  font-size: 20px;
-  font-weight: 700;
+  font-family: "Source Serif Pro", "Cormorant Garamond", "Iowan Old Style", Georgia, "Times New Roman", serif;
+  font-size: 24px;
+  font-weight: 550;
   color: var(--text-primary);
-  letter-spacing: -0.02em;
+  letter-spacing: -0.012em;
   margin-bottom: 12px;
   display: flex;
   align-items: center;
@@ -3191,8 +3207,10 @@ body.gate-mode #smart-explore-overlay {
 }
 
 .section-card h3 {
-  font-size: 15px;
-  font-weight: 700;
+  font-family: "Source Serif Pro", "Cormorant Garamond", "Iowan Old Style", Georgia, "Times New Roman", serif;
+  font-size: 18px;
+  font-weight: 550;
+  letter-spacing: -0.01em;
   color: var(--text-primary);
   margin-bottom: 8px;
 }
@@ -3251,8 +3269,10 @@ body.gate-mode #smart-explore-overlay {
 }
 
 .section-deliverable-body h4 {
-  font-size: 15px;
-  font-weight: 700;
+  font-family: "Source Serif Pro", "Cormorant Garamond", "Iowan Old Style", Georgia, "Times New Roman", serif;
+  font-size: 18px;
+  font-weight: 550;
+  letter-spacing: -0.01em;
   color: var(--text-primary);
   margin-bottom: 8px;
 }
@@ -3327,8 +3347,10 @@ body.gate-mode #smart-explore-overlay {
 }
 
 .section-domain-card h4 {
-  font-size: 13px;
-  font-weight: 700;
+  font-family: "Source Serif Pro", "Cormorant Garamond", "Iowan Old Style", Georgia, "Times New Roman", serif;
+  font-size: 16px;
+  font-weight: 550;
+  letter-spacing: -0.008em;
   color: var(--text-primary);
   margin-bottom: 6px;
 }
@@ -5051,3 +5073,270 @@ body.gate-mode #smart-explore-overlay {
   .gate-partners-row { gap: 28px; }
   .gate-partner-logo { height: 40px; }
 }
+
+/* ===== About: White Paper banner (dark editorial hero) ===== */
+.whitepaper-banner {
+  position: relative;
+  display: grid;
+  grid-template-columns: 1.35fr 1fr;
+  align-items: center;
+  gap: 40px;
+  padding: 48px 40px;
+  margin: 0 0 64px;
+  background: #0b0f14;
+  color: #f5f1e8;
+  border-radius: 20px;
+  overflow: hidden;
+  box-shadow: 0 18px 48px rgba(15,23,42,0.18);
+}
+.whitepaper-banner-text {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 24px;
+  text-align: left;
+  padding: 8px 0 8px 16px;
+}
+.whitepaper-title {
+  font-family: "Source Serif Pro", "Cormorant Garamond", "Iowan Old Style", "Apple Garamond", Georgia, "Times New Roman", serif;
+  font-size: clamp(30px, 3vw, 46px);
+  font-weight: 550;
+  color: #f5f1e8;
+  margin: 0;
+  line-height: 1.05;
+  letter-spacing: -0.012em;
+}
+.whitepaper-subtitle {
+  font-family: var(--font);
+  font-size: 15px;
+  font-weight: 400;
+  color: #d6cfc1;
+  margin: 0;
+  line-height: 1.5;
+  letter-spacing: 0.005em;
+}
+.whitepaper-cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 8px;
+  padding: 12px 22px;
+  background: #f5f1e8;
+  color: #0b0f14;
+  font-family: var(--font);
+  font-size: 15px;
+  font-weight: 500;
+  border-radius: 999px;
+  text-decoration: none;
+  transition: background 0.18s ease, transform 0.18s ease, box-shadow 0.18s ease;
+  box-shadow: 0 1px 0 rgba(255,255,255,0.04);
+}
+.whitepaper-cta:hover {
+  background: #ffffff;
+  transform: translateY(-1px);
+  box-shadow: 0 8px 18px rgba(0,0,0,0.18);
+}
+.whitepaper-thumb {
+  flex-shrink: 0;
+  display: block;
+  border-radius: 4px;
+  overflow: visible;
+  border: none;
+  justify-self: end;
+  transition: transform 0.2s ease;
+}
+.whitepaper-thumb:hover {
+  transform: translateY(-2px) rotate(-0.4deg);
+}
+.whitepaper-thumb img {
+  display: block;
+  height: 280px;
+  width: auto;
+  max-width: 100%;
+  object-fit: cover;
+  border-radius: 6px;
+  filter: drop-shadow(0 22px 44px rgba(0,0,0,0.55)) drop-shadow(0 4px 10px rgba(0,0,0,0.35));
+}
+@media (max-width: 1100px) {
+  .whitepaper-banner { padding: 48px 40px; }
+}
+@media (max-width: 860px) {
+  .whitepaper-banner {
+    grid-template-columns: 1fr;
+    gap: 32px;
+    padding: 36px 28px;
+    margin: 0 0 48px;
+    text-align: left;
+    border-radius: 16px;
+  }
+  .whitepaper-banner-text { padding-left: 0; }
+  .whitepaper-thumb { justify-self: start; }
+  .whitepaper-thumb img { height: 240px; }
+}
+
+/* Inline link inside about section bodies */
+.section-inline-link {
+  color: #038d8f;
+  font-weight: 500;
+  text-decoration: none;
+  border-bottom: 1px solid rgba(3,141,143,0.25);
+  transition: color 0.15s ease, border-color 0.15s ease;
+}
+.section-inline-link:hover {
+  color: #00b3b0;
+  border-bottom-color: rgba(0,179,176,0.6);
+}
+
+/* ===== About-mode: transparent scroll-aware nav (mirrors gate-mode) ===== */
+body.about-mode #control-bar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  width: 100%;
+  z-index: 200;
+  background: transparent;
+  border-bottom: 1px solid transparent;
+  box-shadow: none;
+  transition: background 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease;
+}
+body.about-mode #control-bar.is-scrolled {
+  background: rgba(255, 255, 255, 0.85);
+  -webkit-backdrop-filter: blur(12px);
+  backdrop-filter: blur(12px);
+  border-bottom-color: var(--border);
+  box-shadow: var(--shadow-sm);
+}
+body.about-mode #about-page {
+  padding-top: 60px;
+}
+
+/* ===== Team page ===== */
+.team-partners {
+  padding: 16px 0 8px;
+  text-align: center;
+}
+.team-partners-title {
+  font-size: 13px;
+  font-weight: 500;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #6b7280;
+  margin: 0 auto 20px;
+}
+.team-partners-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 40px;
+  row-gap: 24px;
+}
+.team-partner-logo {
+  height: 48px;
+  width: auto;
+  max-width: 160px;
+  object-fit: contain;
+  filter: grayscale(100%);
+  opacity: 0.8;
+  transition: filter 0.2s ease, opacity 0.2s ease;
+}
+.team-partner-logo:hover {
+  filter: grayscale(0%);
+  opacity: 1;
+}
+.team-list {
+  list-style: none;
+  padding: 0;
+  margin: 8px 0 0;
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 8px;
+}
+.team-list li {
+  font-size: 14px;
+  color: var(--text-secondary);
+  line-height: 1.55;
+  padding: 4px 0;
+}
+.team-list li strong {
+  color: var(--text-primary);
+  font-weight: 600;
+}
+
+/* ===== Gate sunburst hover tooltip ===== */
+.gate-sunburst-container { position: relative; z-index: 9999; }
+.gate-sb-tip {
+  position: absolute;
+  top: 0;
+  left: 0;
+  pointer-events: none;
+  max-width: 280px;
+  padding: 14px 16px;
+  background: rgba(17, 24, 39, 0.96);
+  color: #f5f5f5;
+  border-radius: 12px;
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.25);
+  font-size: 13px;
+  line-height: 1.5;
+  opacity: 0;
+  transition: opacity 0.12s ease;
+  z-index: 10000;
+  -webkit-backdrop-filter: blur(8px);
+  backdrop-filter: blur(8px);
+}
+.gate-sb-tip.visible { opacity: 1; }
+.gate-sb-tip-kicker {
+  font-size: 10.5px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #9ca3af;
+  margin-bottom: 4px;
+}
+.gate-sb-tip-title {
+  font-family: "Source Serif Pro", "Iowan Old Style", Georgia, serif;
+  font-size: 19px;
+  font-weight: 550;
+  letter-spacing: -0.01em;
+  color: #fff;
+  margin-bottom: 6px;
+}
+.gate-sb-tip-desc {
+  font-size: 12.5px;
+  color: #d1d5db;
+  margin-bottom: 8px;
+}
+.gate-sb-tip-label {
+  font-size: 10.5px;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: #9ca3af;
+  margin: 6px 0 4px;
+}
+.gate-sb-tip-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px 6px;
+}
+.gate-sb-tip-chip {
+  display: inline-block;
+  padding: 3px 9px;
+  border-radius: 10px;
+  background: rgba(255, 255, 255, 0.1);
+  color: #f3f4f6;
+  font-size: 11.5px;
+  font-weight: 500;
+}
+.gate-sb-tip-ex {
+  display: flex;
+  align-items: flex-start;
+  gap: 6px;
+  font-size: 12px;
+  margin-top: 3px;
+  color: #e5e7eb;
+}
+.gate-sb-tip-ex i { margin-top: 3px; font-size: 10px; }
+.gate-sb-tip-ex.pos i { color: #16a34a; }
+.gate-sb-tip-ex.neg i { color: #ef4444; }
